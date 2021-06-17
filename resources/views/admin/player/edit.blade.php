@@ -1,0 +1,145 @@
+@extends('layouts.app')
+
+@section('content')
+
+<!-- Page Banner Area Start -->
+<div id="page-banner-area" class="page-banner-area section">
+    <div class="container">
+    </div>
+</div>
+<!-- Page Banner Area End -->
+
+<!-- Contact Area Start -->
+<div id="contact-area" class="contact-area section pb-90 pt-120">
+    <div class="container">
+        <div class="row text-center">
+            <!-- Contact Form -->
+            <div class="col-sm-10 col-sm-offset-1 col-xs-12 mb-30">
+                <div class="submit-form">
+                    <form id="submit-form" action="{{route('players.update')}}" method="post">
+                        @csrf
+                        <h4>Edit Player</h4>
+                        <input class="hidden" name="id" value={{$id}} />
+                        <input class="hidden" name="gameid" value={{$game}} />
+                        <div class="row">
+                            <div class="col-md-6 col-xs-12">
+                                <div class="w-100 maxwidth-200 mx-auto">
+                                    <p class="player-label">Game</p>
+                                    <select name="gameid" onchange="getRoundsByGameId(this)" required>
+                                        <option disabled selected>Select Game!</option>
+                                        @if(isset($games) && count($games) > 0)
+                                            @foreach($games as $key=>$item)
+                                                <option value={{$item['id']}} @if(isset($game)) @if($game == $item['id']) selected @endif @else @if($player['gameid'] == $item['id']) selected @endif @endif>{{$item['name']}}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-xs-12">
+                                <div class="w-100 maxwidth-200 mx-auto">
+                                    <p class="player-label">Round</p>
+                                    <select name="roundid" required>
+                                        <option disabled selected>Select Round!</option>
+                                        @if(isset($rounds) && count($rounds) > 0)
+                                            @foreach($rounds as $key=>$item)
+                                                <option value={{$item['id']}} @if($player['roundid'] == $item['id'])selected @endif>{{$item['roundno']}}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-xs-12">
+                                <div class="w-100 maxwidth-200 mx-auto">
+                                    <p class="player-label">Name</p>
+                                    <input type="text" name="name" @if(isset($player)) value="{{$player["name"]}}"@endif />
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-xs-12">
+                                <div class="w-100 maxwidth-200 mx-auto">
+                                    <p class="player-label">Team</p>
+                                    <input type="text" name="team" @if(isset($player)) value="{{$player["team"]}}"@endif />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-md-offset-3 col-xs-12">
+                                <div class="w-100 maxwidth-200 mx-auto">
+                                    <p class="player-label">Number</p>
+                                    <input type="text" name="no" @if(isset($player)) value="{{$player["no"]}}"@endif />
+                                </div>
+                            </div>
+                        </div>
+                        <h5 class="mt-20">Additional Inputs</h5>
+                        <hr />
+                        <div id="newinputs" class="row">
+                            @if(isset($player['detail']))
+                                @foreach(json_decode($player['detail']) as $key => $value)
+                                    <div class="col-md-5 col-xs-12">
+                                        <div class="w-100 maxwidth-200 mx-auto">
+                                            <p class="player-label">Title</p>
+                                            <input type="text" onkeyup="changeName(this)" value="{{$key}}" required />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5 col-xs-12">
+                                        <div class="w-100 maxwidth-200 mx-auto">
+                                            <p class="player-label">Content</p>
+                                            <input type="text" value="{{$value}}" name="{{$key}}" required />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 col-xs-12">
+                                        <div class="w-100 mx-auto d-flex align-items-center">
+                                            <button type="button w-100" class="close" onclick="removeItem(this)">
+                                                <span aria-hidden="true">&times;</span>
+                                                <span class="sr-only">Close</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            @endif
+                        </div>
+                        <div class="row">
+                            <input type="button" onclick="addInput()" value="Add New Input" />
+                        </div>
+                        <hr />
+                        <input type="submit" value="Submit">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Contact Area End -->
+
+@endsection
+
+@section('scripts')
+    <script>
+        function getRoundsByGameId(e) {
+            window.location.href = "{{route('players.edit', $id)}}?game=" + e.value;
+        }
+        function removeItem(obj) {
+            $(obj).parent().parent().prev().prev().remove();
+            $(obj).parent().parent().prev().remove();
+            $(obj).parent().parent().remove();
+        }
+        function addInput() {
+
+            $("#newinputs").append('<div class="col-md-5 col-xs-12"><div class="w-100 maxwidth-200 mx-auto">'+
+                                    '<p class="player-label">Title</p><input type="text" onkeyup="changeName(this)" required />'+
+                                '</div></div>'+
+                                '<div class="col-md-5 col-xs-12"><div class="w-100 maxwidth-200 mx-auto">'+
+                                    '<p class="player-label">Content</p><input type="text" required />'+
+                                '</div></div>'+
+                                '<div class="col-md-2 col-xs-12"><div class="w-100 mx-auto d-flex align-items-center">'+
+                                    '<button type="button w-100" class="close" onclick="removeItem(this)"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>'+
+                                '</div></div>');
+
+        }
+
+        function changeName(obj) {
+            $(obj).parent().parent().next().find("input").attr("name", obj.value)
+        }
+    </script>
+@endsection
