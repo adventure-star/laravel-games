@@ -22,10 +22,6 @@
                             <td>{{$user['fullname']}}</td>
                         </tr>
                         <tr>
-                            <td>Team Name</td>
-                            <td>{{$user['teamname']}}</td>
-                        </tr>
-                        <tr>
                             <td>User Name</td>
                             <td>{{$user['username']}}</td>
                         </tr>

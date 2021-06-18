@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Model\Answer;
 use App\Model\Fixture;
 use App\Model\Game;
+use App\Model\GameUser;
 use App\Model\Joined;
 use App\Model\Player;
 use App\Model\Point;
@@ -60,71 +61,49 @@ class CommonController extends Controller
         return view('origin.wishlist');
     }
 
-    public function submit() {
+    public function submit(Request $request, $id) {
 
-        $rounds = Round::where("ended", "=", 1)->get();
+        $round = $request->query('round');
 
-        return view('guest.submit', compact('rounds'));
+        $rounds = Round::where(["state" => 1, 'gameid' => $id, 'active' => 1])->get();
+
+        $game = Game::find($id);
+
+        if(!!!$game->other) {
+            if(Auth::user()) {
+                return redirect()->route('games.joined');
+            } else {
+                return redirect()->route('games.open');
+            }
+        }
+
+        $other = json_decode($game->other);
+
+        $category = $other->item;
+
+        $details = json_decode($other->details);
+
+        $players = Player::where(['gameid' => $id, 'roundid' => $round])->get();
+
+        $questions = Question::where(['gameid' => $id, 'roundid' => $round])->get();
+
+        if(!Auth::User()) {
+            return view('guest.submit', compact('rounds', 'id', 'category', 'details', 'round', 'players', 'questions'));
+        }
+
+        $olddata = Team::where(['userid' => Auth::user()->id, 'gameid' => $id, 'roundid' => $round])->first();
+
+        if($olddata) {
+            $olddetail = get_object_vars(json_decode($olddata->detail));
+            return view('guest.submit', compact('rounds', 'id', 'category', 'details', 'round', 'players', 'questions', 'olddetail'));
+        } else {
+            return view('guest.submit', compact('rounds', 'id', 'category', 'details', 'round', 'players', 'questions'));
+        }
 
     }
 
     public function rule() {
         return view('guest.rule');
-    }
-
-    public function submitdata(Request $request)
-    {
-
-        $goalkeepers = Player::where("position", "=", "G")->where("round", "=", $request->round)->get();
-        $defender1 = Player::where("position", "=", "D1")->where("round", "=", $request->round)->get();
-        $defender2 = Player::where("position", "=", "D2")->where("round", "=", $request->round)->get();
-        $midfielder1 = Player::where("position", "=", "M1")->where("round", "=", $request->round)->get();
-        $midfielder2 = Player::where("position", "=", "M2")->where("round", "=", $request->round)->get();
-        $forward1 = Player::where("position", "=", "F1")->where("round", "=", $request->round)->get();
-        $forward2 = Player::where("position", "=", "F2")->where("round", "=", $request->round)->get();
-
-        // foreach($goalkeepers as $key=>$value) {
-        //     if($key == 'team') {
-        //         $goalkeepers->$key = RealTeam::find($value)->name;
-        //     }
-        // }
-
-        $questions = Question::where("round", "=", $request->round)->get();
-
-        foreach($questions as $question) {
-            $question["qinputs"] = QInput::where("qid", "=", $question['id'])->get();
-        }
-
-        $fixtures = Fixture::where("round", "=", $request->round)->get();
-
-        $teams = RealTeam::all();
-
-        $data = array(
-            'g'=>$goalkeepers, 
-            'd1'=>$defender1, 
-            'd2'=>$defender2, 
-            'm1'=>$midfielder1, 
-            'm2'=>$midfielder2, 
-            'f1'=>$forward1, 
-            'f2'=>$forward2, 
-            'questions'=>$questions, 
-            'fixtures'=>$fixtures,
-            'teams'=>$teams
-        );
-
-        $olddata = Team::where('jid', '=', Auth::id())->where('round', '=', $request->round)->get();
-
-        $oldanswers = Answer::where('jid', '=', Auth::id())->where('round', '=', $request->round)->get();
-
-        if(count($olddata) != 0) {
-            $data["old"] = $olddata;
-        }
-        if(count($oldanswers) != 0) {
-            $data["oldanswers"] = $oldanswers;
-        }
-
-        return response()->json($data, 200);
-
     }
     public function getteamname(Request $request) {
         $record = RealTeam::find($request->id);
@@ -137,77 +116,74 @@ class CommonController extends Controller
 
         $validator = Validator::make($request->all(),
         [
-            'g' => 'required|string',
-            'd1' => 'required|string',
-            'd2' => 'required|string',
-            'm1' => 'required|string',
-            'm2' => 'required|string',
-            'f1' => 'required|string',
-            'f2' => 'required|string'
+            'gameid' => 'required|string',
+            'roundid' => 'required|string',
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        $record = Team::where("jid", "=", Auth::user()->id)->where("round", "=", $request->round)->first();
+        $record = Team::where(["userid" => Auth::user()->id, "gameid" => $request->gameid, "roundid" => $request->roundid])->first();
+
+        $detail = [];
+
+        $defaults = array('gameid', 'roundid', '_token');
+        $detailkeys = array();
+
+        $pattern = '/^question_/';
+
+        foreach($request->all() as $key => $item) {
+
+            if(in_array($key, $detailkeys)) {
+                return redirect()->back()->withInput();
+            }
+
+            if(!in_array($key, $defaults) && !preg_match($pattern, $key)) {
+
+                $detail[$key] = $item;
+            }
+
+            array_push($detailkeys, $key);
+
+        }
+
 
         if($record) {
             $data = ([
-                'g' => $request->g,
-                'd1' => $request->d1,
-                'd2' => $request->d2,
-                'm1' => $request->m1,
-                'm2' => $request->m2,
-                'f1' => $request->f1,
-                'f2' => $request->f2
+                'detail' => json_encode($detail),
             ]);
 
             Team::where('id', $record->id)->update($data);
 
         } else {
             $new = new Team();
-            $new->jid = Auth::user()->id;
-            $new->round = $request->round;
-            $new->g = $request->g;
-            $new->d1 = $request->d1;
-            $new->d2 = $request->d2;
-            $new->m1 = $request->m1;
-            $new->m2 = $request->m2;
-            $new->f1 = $request->f1;
-            $new->f2 = $request->f2;
+            $new->userid = Auth::user()->id;
+            $new->gameid = $request->gameid;
+            $new->roundid = $request->roundid;
+            $new->detail = json_encode($detail);
             $new->save();
         }
 
-        $pattern = '/^question_/';
+        Answer::where(['userid' => Auth::user()->id, 'gameid' => $request->gameid, 'roundid' => $request->roundid])->delete();
 
         foreach($request->all() as $key=>$value) {
 
             if(preg_match($pattern, $key)) {
 
-                print_r(number_format(substr($key, 9)));
-
-                $record = Answer::where('jid', '=', Auth::user()->id)->where('round', '=', $request->round)->where('question', '=', number_format(substr($key, 9)))->first();
-                if($record) {
-                    $data = ([
-                            'qinput' => $value
-                        ]);
-                        
-                    Answer::where('id', $record->id)->update($data);
-                } else {
-                    $newanswer = new Answer();
-                    $newanswer->jid = Auth::user()->id;
-                    $newanswer->round = $request->round;
-                    $newanswer->question = number_format(substr($key, 9));
-                    $newanswer->qinput = $value;
-                    $newanswer->save();
-                }
+                $newanswer = new Answer();
+                $newanswer->userid = Auth::user()->id;
+                $newanswer->gameid = $request->gameid;
+                $newanswer->roundid = $request->roundid;
+                $newanswer->questionid = number_format(substr($key, 9));
+                $newanswer->qinputid = $value;
+                $newanswer->save();
 
             }
 
         }
 
-        return redirect()->route('userteams');
+        return redirect()->route('games.joined');
 
     }
     public function profile() {
@@ -217,33 +193,40 @@ class CommonController extends Controller
     }
     public function standing(Request $request) {
 
-        $queryround = $request->query('round');
+        $game = $request->query('game');
+        $round = $request->query('round');
+
+        $games = Game::where('state', 2)->get();
+
 
         $rounds = Round::where('state', '=', 2)->get();
 
-        if(!!$request->query('round') && $request->query('round') !== 'all') {
+        // if(!!$request->query('round') && $request->query('round') !== 'all') {
 
-            $teams = Team::leftJoin('results', 'teams.id', '=', 'results.team')
-            ->selectRaw('teams.*, results.point as point')
-            ->where('teams.round', $queryround)
-            ->groupBy('teams.id')
-            ->orderBy('point', 'desc')
-            ->get();
+        //     $teams = Team::leftJoin('results', 'teams.id', '=', 'results.team')
+        //     ->selectRaw('teams.*, results.point as point')
+        //     ->where('teams.round', $round)
+        //     ->groupBy('teams.id')
+        //     ->orderBy('point', 'desc')
+        //     ->get();
 
-        } else {
-            $teams = Team::leftJoin('results', 'teams.id', '=', 'results.team')
-            ->selectRaw('teams.userid, sum(results.point) as point')
-            ->groupBy('teams.userid')
-            ->orderBy('point', 'desc')
-            ->get();
+        // } else {
+        //     $teams = Team::leftJoin('results', 'teams.id', '=', 'results.team')
+        //     ->selectRaw('teams.userid, sum(results.point) as point')
+        //     ->groupBy('teams.userid')
+        //     ->orderBy('point', 'desc')
+        //     ->get();
 
-        }
+        // }
 
-        if(!!$queryround) {
-            return view('common.userteam.standing', compact('rounds', 'teams', 'queryround'));
-        } else {
-            return view('common.userteam.standing', compact('rounds', 'teams'));
-        }
+        // if(!!$round) {
+        //     return view('common.userteam.standing', compact('rounds', 'teams', 'round'));
+        // } else {
+        //     return view('common.userteam.standing', compact('rounds', 'teams'));
+        // }
+
+        return view('common.userteam.standing', compact('rounds', 'games', 'game', 'round'));
+
         
     }
 
@@ -288,13 +271,36 @@ class CommonController extends Controller
 
     public function userteams(Request $request) {
 
+        $game = $request->query('game');
+        $round = $request->query('round');
+
         if(Auth::user()->isadmin == 1) {
-            $teams = Team::all();
+            $games = Team::select('gameid')->distinct()->orderBy('roundid', 'asc')->get();
+            $teams = Team::where(['gameid' => $game])->orderBy('roundid', 'asc')->get();
         } else {
-            $teams = Team::where('jid', Auth::user()->id)->orderBy('round', 'asc')->get();
+            $games = Team::where(['userid' => Auth::user()->id])->select('gameid')->distinct()->orderBy('roundid', 'asc')->get();
+            $teams = Team::where(['userid' => Auth::user()->id, 'gameid' => $game])->orderBy('roundid', 'asc')->get();
         }
 
-        return view('common.userteam.list', compact('teams'));
+        if(!!$game) {
+
+            $rounds = Round::where('active', 1)->where('gameid', $game)->get();
+
+            if(!!!$round || $round == "all") {
+                return view('common.userteam.list', compact('teams', 'games', 'game', 'rounds'));
+            } else {
+                if(Auth::user()->isadmin == 1) {
+                    $teams = Team::where(['gameid' => $game, 'roundid' => $round])->orderBy('roundid', 'asc')->get();
+                } else {
+                    $teams = Team::where(['gameid' => $game, 'roundid' => $round, 'userid' => Auth::user()->id])->orderBy('roundid', 'asc')->get();
+                }
+                return view('common.userteam.list', compact('teams', 'games', 'game', 'rounds', 'round'));
+            }
+
+        } else {
+            return view('common.userteam.list', compact('teams', 'games', 'game'));
+
+        }
 
     }
 
@@ -341,16 +347,68 @@ class CommonController extends Controller
     // }
 
     public function opengames() {
+        
         $games = Game::where(['active' => 1, 'state'=> 1])->get();
-        return view('common.game.open', compact('games'));
+
+        if(Auth::user()) {
+            foreach($games as $key=>$game) {
+                $joined = GameUser::where(['gameid' => $game->id, 'userid' => Auth::user()->id])->get();
+                if(count($joined) != 0) {
+                    $game['joined'] = 1;
+                } else {
+                    $game['joined'] = 0;
+                }
+            }
+        }
+
+        return view('guest.game.open', compact('games'));
+
     }
     public function gamecalendar() {
         $games = Game::where(['active' => 1])->get();
-        return view('common.game.open', compact('games'));
+        return view('guest.game.calendar', compact('games'));
     }
     public function endedgames() {
         $games = Game::where(['active' => 1, 'state'=> 2])->get();
-        return view('common.game.open', compact('games'));
+        return view('guest.game.ended', compact('games'));
+    }
+
+    public function getFinalStanding($id) {
+
+        $teams = [];
+
+        return view('guest.ended.standing', compact('id'));
+
+    }
+
+    public function joinedgames() {
+
+        $games = GameUser::where('userid', Auth::user()->id)->orderBy('gameid', 'asc')->get();
+
+        return view('guest.game.joined', compact('games'));
+    }
+    public function gameregister(Request $request) {
+
+        $validator = Validator::make($request->all(),
+        [
+            'gameid' => 'required|numeric',
+            'teamname' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $new = new GameUser();
+
+        $new->userid = Auth::user()->id;
+        $new->gameid = $request->gameid;
+        $new->teamname = $request->teamname;
+
+        $new->save();
+
+        return redirect()->route("games.joined");
+
     }
 
 

@@ -16,6 +16,7 @@ class CreateTeamsTable extends Migration
         Schema::create('teams', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('userid');
+            $table->unsignedBigInteger('gameid');
             $table->unsignedBigInteger('roundid');
             $table->json('detail');
             $table->integer('active')->default(1);

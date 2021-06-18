@@ -24,7 +24,7 @@
                             <div class="col-md-6 col-md-offset-3 col-xs-12">
                                 <div class="w-100 maxwidth-200 mx-auto">
                                     <p class="player-label">Name</p>
-                                    <input type="text" name="name" @if(isset($game)) value={{$game["name"]}}@endif />
+                                    <input type="text" name="name" @if(isset($game)) value="{{$game["name"]}}"@endif />
                                 </div>
                             </div>
                         </div>
@@ -46,7 +46,7 @@
                             <div class="col-md-6 col-md-offset-3 col-xs-12">
                                 <div class="w-100 maxwidth-200 mx-auto">
                                     <p class="player-label">Deadline</p>
-                                    <input type="text" name="deadline" @if(isset($game)) value={{$game["deadline"]}}@endif />
+                                    <input type="text" name="deadline" @if(isset($game)) value="{{$game["deadline"]}}"@endif />
                                 </div>
                             </div>
                         </div>

@@ -49,13 +49,20 @@
                                             @endif
                                         </li>
                                     @else
-                                        <li @if(Route::is('submit'))class="active"@endif><a href={{route('submit')}}>game</a></li>
+                                        {{-- <li @if(Route::is('submit'))class="active"@endif><a href={{route('submit')}}>game</a></li>
                                         <li @if(Route::is('rule'))class="active"@endif><a href={{route('rule')}}>rules</a></li>
+                                        <li @if(Route::is('standing'))class="active"@endif><a href={{route('standing')}}>standing</a></li> --}}
+
+                                        <li @if(Route::is('games.joined'))class="active"@endif><a href={{route('games.joined')}}>My Games</a></li>
+                                        <li @if(Route::is('games.open'))class="active"@endif><a href={{route('games.open')}}>Open Games</a></li>
+                                        <li @if(Route::is('games.calendar'))class="active"@endif><a href={{route('games.calendar')}}>Game Calendar</a></li>
+                                        <li @if(Route::is('games.ended') || Route::is('finalstanding'))class="active"@endif><a href={{route('games.ended')}}>Ended Games</a></li>
                                         <li @if(Route::is('userteams'))class="active"@endif><a href={{route('userteams')}}>my teams</a></li>
-                                        <li @if(Route::is('standing'))class="active"@endif><a href={{route('standing')}}>standing</a></li>
-                                        @if(Auth::user()->ispaid == 1)
+
+
+                                        {{-- @if(Auth::user()->ispaid == 1)
                                             <li @if(Route::is('groupstanding'))class="active"@endif><a href={{route('groupstanding')}}>group standing</a></li>
-                                        @endif
+                                        @endif --}}
                                     @endif
                                 @else
                                     {{-- <li @if(Route::is('submit'))class="active"@endif><a href={{route('submit')}}>game</a></li>
@@ -64,7 +71,7 @@
 
                                     <li @if(Route::is('games.open'))class="active"@endif><a href={{route('games.open')}}>Open Games</a></li>
                                     <li @if(Route::is('games.calendar'))class="active"@endif><a href={{route('games.calendar')}}>Game Calendar</a></li>
-                                    <li @if(Route::is('games.ended'))class="active"@endif><a href={{route('games.ended')}}>Ended Games</a></li>
+                                    <li @if(Route::is('games.ended') || Route::is('finalstanding'))class="active"@endif><a href={{route('games.ended')}}>Ended Games</a></li>
                                 @endif
                                 {{-- <li><a href={{route('pointtable')}}>point table</a></li> --}}
                                 {{-- <li><a href={{route('blog')}}>blog</a>

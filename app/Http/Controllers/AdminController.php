@@ -106,6 +106,55 @@ class AdminController extends Controller
         return $deleted;
 
     }
+    public function gamesettings($id) {
+
+        $game = Game::find($id);
+        $other = Game::find($id)->other;
+
+        if(!!$other) {
+            $item = json_decode(Game::find($id)->other)->item;
+            return view('admin.game.settings', compact('id', 'game', 'item'));
+        } else {
+            return view('admin.game.settings', compact('id', 'game'));
+        }
+
+
+    }
+    public function gamesettingssave(Request $request) {
+        
+        $game = Game::find($request->gameid);
+
+        $settings = [];
+
+        $settings['item'] = $request->item;
+
+        $defaults = array('gameid', 'item', '_token');
+        $detailkeys = array();
+
+        $detail = [];
+
+        foreach($request->all() as $key => $item) {
+
+            if(in_array($key, $detailkeys)) {
+                return redirect()->back()->withInput();
+            }
+
+            if(!in_array($key, $defaults)) {
+
+                $detail[$key] = $item;
+            }
+
+            array_push($detailkeys, $key);
+
+        }
+
+        $settings['details'] = json_encode($detail);
+
+        Game::where('id', $request->gameid)->update(['other' => json_encode($settings)]);
+
+        return redirect()->route("games");
+
+    }
 
     // Operations For Rounds
 
@@ -815,7 +864,7 @@ class AdminController extends Controller
                     return redirect()->back()->withInput();
                 }
 
-                $player = Player::where(['gameid' =>  Game::where('name', '=', $array['game'])->first()->id,'roundid' =>  Round::where('roundno', '=', number_format($array['round']))->first()->id, 'name' =>  $array['name'], 'team' =>  $array['team'], 'no' =>  $array['no']])->first();
+                $player = Player::where(['gameid' =>  Game::where('name', '=', $array['game'])->first()->id,'roundid' =>  Round::where(['gameid' => Game::where('name', '=', $array['game'])->first()->id, 'roundno' => number_format($array['round'])])->first()->id, 'name' =>  $array['name'], 'team' =>  $array['team'], 'no' =>  $array['no']])->first();
     
                 if(!$player) {
 
@@ -825,7 +874,7 @@ class AdminController extends Controller
                     $detailkeys = [];
     
                     foreach($customerArr[$i] as $key => $value) {
-                        
+
                         if(str_contains($key, 'Game')) {
                             $game = Game::where('name', '=', $value)->first();
                             if(!!$game) {
@@ -835,7 +884,7 @@ class AdminController extends Controller
                             }
                         } else {
                             if(str_contains($key, 'Round')) {
-                                $round = Round::where('roundno', '=', number_format($value))->first();
+                                $round = Round::where(['gameid' => Game::where('name', $array['game'])->first()->id, 'roundno' => number_format($value)])->first();
                                 if(!!$round) {
                                     $new->roundid = $round->id;
                                 } else {
@@ -950,7 +999,7 @@ class AdminController extends Controller
                     return redirect()->back()->withInput();
                 }
 
-                $player = Player::where(['gameid' => Game::where('name', $array['game'])->first()->id, 'roundid' => Round::where('roundno', $array['round'])->first()->id, 'team' => $array['team'], 'no' => $array['no']])->first();
+                $player = Player::where(['gameid' => Game::where('name', $array['game'])->first()->id, 'roundid' => Round::where(['gameid' => Game::where('name', $array['game'])->first()->id, 'roundno' => $array['round']])->first()->id, 'team' => $array['team'], 'no' => $array['no']])->first();
 
                 if(!!$player) {
 
@@ -1161,31 +1210,29 @@ class AdminController extends Controller
 
     public function pointcalculate() {
 
-        $rounds = Round::where('ended', 2)->get();
+        $games = Game::where('state', 2)->get();
 
-        try {
+        // try {
 
-            for($index = 0 ; $index < count($rounds) ; $index ++) {
+            for($index = 0 ; $index < count($games) ; $index ++) {
     
-                $teams = Team::where('round', $rounds[$index]->id)->get();
+                $teams = Team::where('gameid', $games[$index]->id)->get();
 
                 foreach($teams as $key => $team) {
 
                     $point = 0;
-    
-                    $point += Point::where('playerid', Player::find($team['g'])->id)->first() ? Point::where('playerid', Player::find($team['g'])->id)->first()->pointtot : 0; 
-                    $point += Point::where('playerid', Player::find($team['d1'])->id)->first() ? Point::where('playerid', Player::find($team['d1'])->id)->first()->pointtot : 0; 
-                    $point += Point::where('playerid', Player::find($team['d2'])->id)->first() ? Point::where('playerid', Player::find($team['d2'])->id)->first()->pointtot : 0; 
-                    $point += Point::where('playerid', Player::find($team['m1'])->id)->first() ? Point::where('playerid', Player::find($team['m1'])->id)->first()->pointtot : 0; 
-                    $point += Point::where('playerid', Player::find($team['m2'])->id)->first() ? Point::where('playerid', Player::find($team['m2'])->id)->first()->pointtot : 0; 
-                    $point += Point::where('playerid', Player::find($team['f1'])->id)->first() ? Point::where('playerid', Player::find($team['f1'])->id)->first()->pointtot : 0; 
-                    $point += Point::where('playerid', Player::find($team['f2'])->id)->first() ? Point::where('playerid', Player::find($team['f2'])->id)->first()->pointtot : 0;
 
-                    $answers = Answer::where(['jid' => $team['jid'], 'round' => $team['round']])->get();
+                    $detail = json_decode($team->detail);
+
+                    foreach($detail as $key=>$item) {
+                        $point += Point::where('playerid', Player::find($item)->id)->first() ? Point::where('playerid', Player::find($item)->id)->first()->total : 0; 
+                    }
+    
+                    $answers = Answer::where(['userid' => $team['userid'], 'gameid' => $team['gameid'], 'roundid' => $team['roundid']])->get();
 
                     foreach($answers as $key => $answer) {
 
-                        $qinput = QInput::find($answer['qinput']);
+                        $qinput = QInput::find($answer['qinputid']);
 
                         if(!!$qinput) {
                             $point += $qinput->point;
@@ -1193,7 +1240,7 @@ class AdminController extends Controller
 
                     }
         
-                    $result = Result::where(['round' => $rounds[$index]->id, 'team' => $team->id])->first();
+                    $result = Result::where(['gameid' => $team['gameid'], 'roundid' => $team['roundid'],  'teamid' => $team->id])->first();
         
                     if($result) {
         
@@ -1207,8 +1254,9 @@ class AdminController extends Controller
         
                         $new = new Result();
         
-                        $new->round = $rounds[$index]->id;
-                        $new->team = $team->id;
+                        $new->gameid = $team['gameid'];
+                        $new->roundid = $team['roundid'];
+                        $new->teamid = $team->id;
                         $new->point = $point;
             
                         $new->save();
@@ -1220,9 +1268,9 @@ class AdminController extends Controller
 
             return 1;
 
-        } catch (Exception $e) {
-            return 0;
-        }
+        // } catch (Exception $e) {
+        //     return 0;
+        // }
 
     }
 

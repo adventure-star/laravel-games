@@ -20,12 +20,16 @@
                         <tr>
                             <th>No</th>
                             <th>Name</th>
+                            <th>State</th>
+                            <th>Deadline</th>
                         </tr>
                         @if(isset($games) && count($games) > 0)
                             @foreach($games as $key => $game)
                                 <tr>
                                     <td>{{$key + 1}}</td>
                                     <td>{{$game['name']}}</td>
+                                    <td>{{$game['state'] == 0 ? 'Not Opened' : ($game['state'] == 1 ? 'Open' : 'Expired')}}</td>
+                                    <td>{{$game['deadline']}}</td>
                                 </tr>
                             @endforeach
                         @endif
@@ -36,35 +40,5 @@
     </div>
 </div>
 <!-- Fixtures Area End -->
-
-@endsection
-
-@section('scripts')
-    <script>
-        function deleteUserTeam(id) {
-
-            $.ajax({
-                method: "post",
-                url: "{{route('userteams.delete')}}",
-                headers: {
-                    'X-CSRF-TOKEN': '<?= csrf_token() ?>'
-                },
-
-                data : JSON.stringify({id : id}),
-                datatype: 'JSON',
-                contentType: 'application/json',
-
-                async: true,
-                success: function (data) {
-                    if(data) {
-                        window.location = "{{route('userteams')}}";
-                    }
-                },
-                error: function () {
-                    console.log("error");
-                }
-            });
-        }
-    </script>
 
 @endsection

@@ -20,7 +20,6 @@
                     <table class="table">
                         <tr>
                             <th>FullName</th>
-                            <th>TeamName</th>
                             <th>UserName</th>
                             <th>Email</th>
                             <th>Marketing</th>
@@ -31,7 +30,6 @@
                             @foreach($users as $key => $item)
                                 <tr>
                                     <td>{{$item["fullname"]}}</td>
-                                    <td>{{$item["teamname"]}}</td>
                                     <td>{{$item["username"]}}</td>
                                     <td>{{$item["email"]}}</td>
                                     <td>{{$item["ismarketing"] == 1 ? "Yes" : "No"}}</td>

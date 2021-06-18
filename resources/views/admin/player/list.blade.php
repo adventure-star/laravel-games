@@ -23,7 +23,7 @@
                             <option value="all">Total</option>
                             @if(isset($games) && count($games) > 0)
                                 @foreach($games as $key => $item)
-                                    <option value={{$item['id']}} @if(isset($game) && $game == $item['id']) selected @endif>{{$item['name']}}</option>
+                                    <option value={{$item['id']}} @if(isset($game) && $game == $item['id']) selected @endif>{{$item['name']}} ({{$item['state'] == 0 ? "Not Opened" : ($item['state'] == 1 ? "Active" : "Expired")}})</option>
                                 @endforeach
                             @endif
                         </select>

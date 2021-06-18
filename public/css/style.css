@@ -4121,3 +4121,17 @@ input[type=number] {
 .font-14 {
   font-size: 14px;
 }
+.teamname {
+  width: 98%;
+  margin: 0 1% 20px;
+  display: block;
+  float: left;
+  border: 1px solid #ddd;
+  height: 44px;
+  padding: 10px 20px 8px;
+  line-height: 24px;
+  color: #444;
+}
+.hover-highlight:hover {
+  background-color: #c9cdf1 !important;
+}

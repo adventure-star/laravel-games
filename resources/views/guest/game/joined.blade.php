@@ -20,12 +20,14 @@
                         <tr>
                             <th>No</th>
                             <th>Name</th>
+                            <th>TeamName</th>
                         </tr>
                         @if(isset($games) && count($games) > 0)
                             @foreach($games as $key => $game)
-                                <tr>
+                                <tr class="cursor-pointer hover-highlight" onclick="gosubmitpage({{$game['gameid']}})">
                                     <td>{{$key + 1}}</td>
-                                    <td>{{$game['name']}}</td>
+                                    <td>{{App\Model\Game::find($game['gameid'])->name}}</td>
+                                    <td>{{$game['teamname']}}</td>
                                 </tr>
                             @endforeach
                         @endif
@@ -41,29 +43,8 @@
 
 @section('scripts')
     <script>
-        function deleteUserTeam(id) {
-
-            $.ajax({
-                method: "post",
-                url: "{{route('userteams.delete')}}",
-                headers: {
-                    'X-CSRF-TOKEN': '<?= csrf_token() ?>'
-                },
-
-                data : JSON.stringify({id : id}),
-                datatype: 'JSON',
-                contentType: 'application/json',
-
-                async: true,
-                success: function (data) {
-                    if(data) {
-                        window.location = "{{route('userteams')}}";
-                    }
-                },
-                error: function () {
-                    console.log("error");
-                }
-            });
+        function gosubmitpage(id) {
+            window.location.href = "/submit/" + id;
         }
     </script>
 

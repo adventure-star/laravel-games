@@ -14,70 +14,107 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12 col-xs-12 text-center">
-                <!-- Fixtures Table -->
-                <div class="table-responsive fixtures-table">
-                    <table class="table">
-                        <tr>
-                            <th>Team</th>
-                            <th>round</th>
-                            <th>G</th>
-                            <th>D1</th>
-                            <th>D2</th>
-                            <th>M1</th>
-                            <th>M2</th>
-                            <th>F1</th>
-                            <th>F2</th>
-                            @if(Auth::user()->isadmin == 1)
-                                <th>Remove</th>
+
+                <div class="row">
+                    <div class="mt-0 mb-20">
+                        <h4>Select Game</h4>
+                        <select class="normal-component maxwidth-200" onchange="getResultsByGameId(this)">
+                            <option disabled selected>Select Game</option>
+                            @if(isset($games) && count($games) > 0)
+                                @foreach($games as $key => $item)
+                                    <option value={{$item['gameid']}} @if(isset($game) && $game == $item['gameid']) selected @endif>{{App\Model\Game::find($item['gameid'])->name}}</option>
+                                @endforeach
                             @endif
-                        </tr>
-                        @if(isset($teams) && count($teams) > 0)
-                            @foreach($teams as $key => $item)
-                                <tr>
-                                    <td>{{App\User::find($item["jid"])["teamname"]}}</td>
-                                    <td>{{App\Model\Round::find($item["round"])["roundno"] }}</td>
-                                    <td>{{App\Model\Player::find($item["g"])["name"]}}</td>
-                                    <td>{{App\Model\Player::find($item["d1"])["name"]}}</td>
-                                    <td>{{App\Model\Player::find($item["d2"])["name"]}}</td>
-                                    <td>{{App\Model\Player::find($item["m1"])["name"]}}</td>
-                                    <td>{{App\Model\Player::find($item["m2"])["name"]}}</td>
-                                    <td>{{App\Model\Player::find($item["f1"])["name"]}}</td>
-                                    <td>{{App\Model\Player::find($item["f2"])["name"]}}</td>
-                                    @if(Auth::user()->isadmin == 1)
-                                        <td>
-                                            <a class="btn btn-success-rgba" data-toggle="modal" data-target="#deletemodal{{$item['id']}}"><i class="fa fa-remove"></i></a>
-                                        </td>
+                        </select>
+                    </div>
+                </div>
+
+                @if($game)
+
+                    @if(Auth::user()->isadmin == 1)
+
+                        <div class="row">
+                            <div class="mt-0 mb-20">
+                                <h4>Select Round</h4>
+                                <select class="normal-component maxwidth-200" onchange="getResultsByRoundId(this)">
+                                    <option value="all">Total</option>
+                                    @if(isset($rounds) && count($rounds) > 0)
+                                        @foreach($rounds as $key => $item)
+                                            <option value={{$item['id']}} @if(isset($round) && $round == $item['id']) selected @endif>{{$item['roundno']}}</option>
+                                        @endforeach
                                     @endif
-                                </tr>
+                                </select>
+                            </div>
+                        </div>
+
+                    @endif
+
+                    <!-- Fixtures Table -->
+                    <div class="table-responsive fixtures-table">
+                        <table class="table">
+                            <tr>
+                                <th>TeamName</th>
+                                <th>round</th>
+                                <th>Detail</th>
                                 @if(Auth::user()->isadmin == 1)
-                                    <div class="modal fade" id="deletemodal{{$item['id']}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                        <div class="vertical-alignment-helper">
-                                            <div class="modal-dialog vertical-align-center">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-                                    
-                                                        </button>
-                                                        <h4 class="modal-title" id="myModalLabel">Sofa League</h4>
-                                    
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <p class="font-24">Do you want to remove this userteam?</p>
-                                                        <p class="font-14">All the results for this userteam will be removed.</p>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-primary float-left" data-dismiss="modal">No</button>
-                                                        <button type="button" class="btn btn-danger" onclick="deleteUserTeam({{$item['id']}})">Yes</button>
+                                    <th>Remove</th>
+                                @endif
+                            </tr>
+                            @if(isset($teams) && count($teams) > 0)
+                                @foreach($teams as $key => $item)
+                                    <tr>
+                                        @if(Auth::user()->isadmin == 1)
+                                            <td>{{App\Model\GameUser::where(['userid' => $item["userid"], 'gameid' => $item['gameid']])->first()->teamname}}</td>
+                                        @else
+                                            @if($key == 0)
+                                                <td rowspan="{{count(App\Model\Team::where(['userid' => Auth::user()->id, 'gameid' => $item['gameid']])->get())}}">{{App\Model\GameUser::where(['userid' => $item["userid"], 'gameid' => $item['gameid']])->first()->teamname}}</td>
+                                            @endif
+                                        @endif
+                                        <td>{{App\Model\Round::find($item["roundid"])["roundno"]}}</td>
+                                        <td class="maxwidth-200">
+                                            @if(isset($item->detail))
+                                                @foreach(json_decode($item->detail) as $key=>$value)
+                                                    {{$key}} : {{App\Model\Player::find($value)['name'] }}
+                                                @endforeach
+                                            @endif
+                                        </td>
+                                        @if(Auth::user()->isadmin == 1)
+                                            <td>
+                                                <a class="btn btn-success-rgba" data-toggle="modal" data-target="#deletemodal{{$item['id']}}"><i class="fa fa-remove"></i></a>
+                                            </td>
+                                        @endif
+                                    </tr>
+                                    @if(Auth::user()->isadmin == 1)
+                                        <div class="modal fade" id="deletemodal{{$item['id']}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                            <div class="vertical-alignment-helper">
+                                                <div class="modal-dialog vertical-align-center">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                                        
+                                                            </button>
+                                                            <h4 class="modal-title" id="myModalLabel">Sofa League</h4>
+                                        
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p class="font-24">Do you want to remove this userteam?</p>
+                                                            <p class="font-14">All the results for this userteam will be removed.</p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-primary float-left" data-dismiss="modal">No</button>
+                                                            <button type="button" class="btn btn-danger" onclick="deleteUserTeam({{$item['id']}})">Yes</button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                @endif
-                            @endforeach
-                        @endif
-                    </table>
-                </div>
+                                    @endif
+                                @endforeach
+                            @endif
+                        </table>
+                    </div>
+
+                @endif
             </div>
         </div>
     </div>
@@ -111,6 +148,12 @@
                     console.log("error");
                 }
             });
+        }
+        function getResultsByGameId(e) {
+            window.location.href = "{{route('userteams')}}?game=" + e.value;
+        }
+        function getResultsByRoundId(e) {
+            window.location.href = "{{route('userteams')}}?round=" + e.value + "&" + "game={{$game}}";
         }
     </script>
 

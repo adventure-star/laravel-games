@@ -19,7 +19,7 @@ Auth::routes();
 
 // Common routes
 Route::get('/', function(Request $request) {
-    return Auth::user() ? (Auth::user()->isadmin == 1 ? redirect()->route('users') : redirect()->route('submit')) : redirect()->route('login');
+    return Auth::user() ? (Auth::user()->isadmin == 1 ? redirect()->route('users') : redirect()->route('games.joined')) : redirect()->route('login');
 })->name('index');
 
 Route::get('/about', 'CommonController@about')->name('about');
@@ -36,7 +36,7 @@ Route::get('/wishlist', 'CommonController@wishlist')->name('wishlist');
 Route::get('/contact', 'CommonController@contact')->name('contact');
 
 // Guest routes
-Route::get('/submit', 'CommonController@submit')->name('submit');
+Route::get('/submit/{id}', 'CommonController@submit')->name('submit');
 Route::get('/rule', 'CommonController@rule')->name('rule');
 
 Route::post('/submit-data', 'CommonController@submitdata')->name('submitdata');
@@ -58,6 +58,8 @@ Route::get('/games', 'AdminController@games')->name('games');
 Route::get('/games/new', 'AdminController@gamenew')->name('games.new');
 Route::post('/games/add', 'AdminController@gameadd')->name('games.new.save');
 Route::get('/games/edit/{id}', 'AdminController@gameedit')->name('games.edit');
+Route::get('/games/settings/{id}', 'AdminController@gamesettings')->name('games.settings');
+Route::post('/games/settings', 'AdminController@gamesettingssave')->name('games.settings.save');
 Route::post('/games/update', 'AdminController@gameupdate')->name('games.update');
 Route::post('/games/delete', 'AdminController@gamedelete')->name('games.delete');
 
@@ -125,9 +127,11 @@ Route::get('/games/open', 'CommonController@opengames')->name('games.open');
 Route::get('/games/calendar', 'CommonController@gamecalendar')->name('games.calendar');
 Route::get('/games/ended', 'CommonController@endedgames')->name('games.ended');
 
+Route::get('/games/joined', 'CommonController@joinedgames')->name('games.joined')->middleware('auth');
+
+Route::get('/finalstanding/{id}', 'CommonController@getFinalStanding')->name('finalstanding');
 
 
-
+Route::post('/games/register', 'CommonController@gameregister')->name('games.register');
 
 // Route::get('/test', 'CommonController@test')->name('test');
-

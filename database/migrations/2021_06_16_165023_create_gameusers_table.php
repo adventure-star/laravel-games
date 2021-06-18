@@ -17,8 +17,8 @@ class CreateGameusersTable extends Migration
             $table->id();
             $table->unsignedBigInteger('userid');
             $table->unsignedBigInteger('gameid');
-            $table->unsignedBigInteger('teamname');
-            $table->json('other');
+            $table->string('teamname');
+            $table->json('other')->nullable();
             $table->timestamps();
         });
     }

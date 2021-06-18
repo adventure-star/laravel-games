@@ -25,12 +25,23 @@ class DatabaseSeeder extends Seeder
 
         $games = 
         [
-            ["id"=>1, "name"=>"tour1", "state"=>1],
-            ["id"=>2, "name"=>"tour2", "state"=>0],
+            ["id"=>1, "name"=>"Tour de France", "state"=>1, "deadline"=>"June 14", "active"=>1],
+            ["id"=>2, "name"=>"Tour de Germany", "state"=>1, "deadline"=>"June 14", "active"=>1],
+            ["id"=>3, "name"=>"Tour de Italy", "state"=>2, "deadline"=>"June 14", "active"=>1],
+            ["id"=>4, "name"=>"Tour de London", "state"=>2, "deadline"=>"June 14", "active"=>1],
+            ["id"=>5, "name"=>"Tour de Wales", "state"=>0, "deadline"=>"June 14", "active"=>1],
+            ["id"=>6, "name"=>"Tour de Edinburgh", "state"=>0, "deadline"=>"June 14", "active"=>1],
+        ];
+
+        $rounds = 
+        [
+            ["id"=>1, "gameid"=>1, "roundno"=>1, "state"=>1, "active"=>1],
+            ["id"=>2, "gameid"=>1, "roundno"=>2, "state"=>1, "active"=>1],
         ];
 
         DB::table('users')->insert($users);
         DB::table('games')->insert($games);
+        DB::table('rounds')->insert($rounds);
 
     }
 }
