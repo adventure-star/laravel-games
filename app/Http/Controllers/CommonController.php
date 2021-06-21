@@ -14,15 +14,50 @@ use App\Model\Question;
 use App\Model\RealTeam;
 use App\Model\Round;
 use App\Model\Team;
+use Exception;
 use Facade\FlareClient\Http\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use PDO;
-use SimpleXLSX;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Mail\Mailer;
+use Illuminate\Mail\Message;
 
 class CommonController extends Controller
 {
+    protected $admin_email = 'contact@sofaleague.com';
+    protected $mailer;
+    protected $fromEmail = "";
+    protected $subject = "";
+
+    
+    public function __construct(Mailer $mailer)
+    {
+        $this->mailer = $mailer;
+    }
+
+    public function sendEmail(Request $request)
+    {
+        try {
+
+            $this->fromEmail = $request->email;
+            $this->subject = $request->subject;
+    
+            $this->mailer->send('layouts.email', ['name'=>$request->name, 'phone'=>$request->phone, 'message'=>$request->message], function (Message $m){
+                $m->from($this->fromEmail)->to($this->admin_email)->subject($this->subject);
+            });
+
+            return redirect()->route('index');
+
+        } catch (Exception $e) {
+
+            return redirect()->back()->withInput();
+            
+        }
+        
+    }
+
+
     public function index() {
         return view('index');
     }
@@ -42,7 +77,7 @@ class CommonController extends Controller
         return view('origin.checkout');
     }
     public function contact() {
-        return view('origin.contact');
+        return view('guest.contact');
     }
 
     public function pointtable() {
@@ -198,73 +233,83 @@ class CommonController extends Controller
 
         $games = Game::where('state', 2)->get();
 
+        if($game) {
+            
+            $rounds = Round::where(['gameid' => $game])->get();
 
-        $rounds = Round::where('state', '=', 2)->get();
+            if(!!$round && $round !== 'all') {
 
-        // if(!!$request->query('round') && $request->query('round') !== 'all') {
+                $teams = Team::leftJoin('results', 'teams.id', '=', 'results.teamid')
+                ->selectRaw('teams.*, results.point as point')
+                ->where('teams.roundid', $round)
+                ->where('teams.gameid', $game)
+                ->groupBy('teams.id')
+                ->orderBy('point', 'desc')
+                ->get();
+    
+            } else {
+    
+                $teams = Team::leftJoin('results', 'teams.id', '=', 'results.teamid')
+                ->selectRaw('teams.*, sum(results.point) as point')
+                ->where('teams.gameid', $game)
+                ->groupBy('teams.userid')
+                ->orderBy('point', 'desc')
+                ->get();
+    
+            }
 
-        //     $teams = Team::leftJoin('results', 'teams.id', '=', 'results.team')
-        //     ->selectRaw('teams.*, results.point as point')
-        //     ->where('teams.round', $round)
-        //     ->groupBy('teams.id')
-        //     ->orderBy('point', 'desc')
-        //     ->get();
+            return view('common.userteam.standing', compact('games', 'rounds', 'game', 'round', 'teams'));
 
-        // } else {
-        //     $teams = Team::leftJoin('results', 'teams.id', '=', 'results.team')
-        //     ->selectRaw('teams.userid, sum(results.point) as point')
-        //     ->groupBy('teams.userid')
-        //     ->orderBy('point', 'desc')
-        //     ->get();
+        } else {
+            return view('common.userteam.standing', compact('games', 'game', 'round'));
 
-        // }
+        }
 
-        // if(!!$round) {
-        //     return view('common.userteam.standing', compact('rounds', 'teams', 'round'));
-        // } else {
-        //     return view('common.userteam.standing', compact('rounds', 'teams'));
-        // }
-
-        return view('common.userteam.standing', compact('rounds', 'games', 'game', 'round'));
-
-        
     }
 
     public function groupstanding(Request $request) {
 
-        $queryround = $request->query('round');
+        $game = $request->query('game');
+        $round = $request->query('round');
 
-        $rounds = Round::where('ended', '=', 2)->get();
+        $games = Game::where('state', 2)->get();
 
-        if(!!$request->query('round') && $request->query('round') !== 'all') {
+        if($game) {
+            
+            $rounds = Round::where(['gameid' => $game])->get();
 
-            $teams = Team::leftJoin('results', 'teams.id', '=', 'results.team')
-            ->selectRaw('teams.*, results.point as point')
-            ->where('teams.round', $queryround)
-            ->leftJoin('users', 'teams.jid', '=', 'users.id')
-            ->selectRaw('teams.*, users.ispaid as ispaid')
-            ->where('ispaid', 1)
-            ->groupBy('teams.id')
-            ->orderBy('point', 'desc')
-            ->get();
+            if(!!$round && $round !== 'all') {
+
+                $teams = Team::leftJoin('results', 'teams.id', '=', 'results.teamid')
+                ->selectRaw('teams.*, results.point as point')
+                ->where('teams.roundid', $round)
+                ->where('teams.gameid', $game)
+                ->leftJoin('users', 'teams.userid', '=', 'users.id')
+                ->selectRaw('teams.*, users.ispaid as ispaid')
+                ->where('ispaid', 1)
+                ->groupBy('teams.id')
+                ->orderBy('point', 'desc')
+                ->get();
+    
+            } else {
+    
+                $teams = Team::leftJoin('results', 'teams.id', '=', 'results.teamid')
+                ->selectRaw('teams.*, sum(results.point) as point')
+                ->where('teams.gameid', $game)
+                ->leftJoin('users', 'teams.userid', '=', 'users.id')
+                ->selectRaw('teams.*, users.ispaid as ispaid')
+                ->where('ispaid', 1)
+                ->groupBy('teams.userid')
+                ->orderBy('point', 'desc')
+                ->get();
+    
+            }
+
+            return view('common.userteam.groupstanding', compact('games', 'rounds', 'game', 'round', 'teams'));
 
         } else {
+            return view('common.userteam.groupstanding', compact('games', 'game', 'round'));
 
-            $teams = Team::leftJoin('results', 'teams.id', '=', 'results.team')
-            ->selectRaw('teams.jid, sum(results.point) as point')
-            ->leftJoin('users', 'teams.jid', '=', 'users.id')
-            ->selectRaw('teams.*, users.ispaid as ispaid')
-            ->where('ispaid', 1)
-            ->groupBy('teams.jid')
-            ->orderBy('point', 'desc')
-            ->get();
-
-        }
-
-        if(!!$queryround) {
-            return view('common.userteam.groupstanding', compact('rounds', 'teams', 'queryround'));
-        } else {
-            return view('common.userteam.groupstanding', compact('rounds', 'teams'));
         }
         
     }
@@ -333,18 +378,7 @@ class CommonController extends Controller
     }
 
 
-    // public function test() {
 
-    //     if ( $xlsx = SimpleXLSX::parse('uploads/points.xlsx') ) {
-    //         if($xlsx->rows(1)) {
-    //             dd($xlsx->rows(1));
-    //         } else {
-    //             echo $xlsx->toHTML();
-    //         }
-    //     } else {
-    //         echo SimpleXLSX::parseError();
-    //     }
-    // }
 
     public function opengames() {
         

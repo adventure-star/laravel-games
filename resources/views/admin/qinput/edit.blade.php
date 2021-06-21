@@ -18,7 +18,7 @@
                 <div class="submit-form">
                     <form id="submit-form" action="{{route('qinputs.update')}}" method="post">
                         @csrf
-                        <h4>Edit QInput</h4>
+                        <h4>Edit Answer</h4>
                         <input class="hidden" name="id" value={{$id}} />
                         <div class="row">
                             <div class="col-md-6 col-xs-12">

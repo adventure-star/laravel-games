@@ -20,6 +20,21 @@
                         <h4>Import CSV file for Player Points</h4>
                         <form id="pointuploadform" action="{{route('uploads.point')}}" method="post" enctype="multipart/form-data">
                             @csrf
+                            <div class="row">
+                                <div class="col-md-12 col-xs-12">
+                                    <div class="w-100 maxwidth-200 mx-auto">
+                                        <p class="player-label">Game</p>
+                                        <select name="gameid" required>
+                                            <option disabled selected>Select Game!</option>
+                                            @if(isset($games) && count($games) > 0)
+                                                @foreach($games as $key=>$item)
+                                                    <option value={{$item['id']}} @if(isset($game) && $game == $item['id']) selected @endif @if(old('game') == $item['id'])selected @endif>{{$item['name']}}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
                             <label class="custom-file-upload">
                                 <input onchange="upload()" class="hidden" type="file" name="file" />
                                 Import

@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Validator;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use SimpleXLSX;
 
 class AdminController extends Controller
 {
@@ -845,9 +846,28 @@ class AdminController extends Controller
 
     public function uploadplayer(Request $request) {
 
+        $validator = Validator::make($request->all(),
+        [
+            'gameid' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
         $path = $request->file('file')->getRealPath();
 
-        $customerArr = $this->csvToArray($path);
+        $type = $request->file('file')->getClientOriginalExtension();
+
+        $gameid = $request->gameid;
+
+        if($type == "csv") {
+            $customerArr = $this->csvToArray($path);
+        }
+
+        if($type == "xlsx") {
+            $customerArr = $this->excelToArray($path);
+        }
 
         try {
             for ($i = 0; $i < count($customerArr); $i ++)
@@ -860,11 +880,11 @@ class AdminController extends Controller
                     array_push($keys, strtolower(preg_replace("/[^a-zA-Z0-9]+/", "", $key)));
                 }
                 
-                if(!count(array_intersect($keys, ['game', 'round', 'team', 'name', 'no'])) == 5) {
+                if(!count(array_intersect($keys, ['round', 'team', 'name', 'no'])) == 5) {
                     return redirect()->back()->withInput();
                 }
 
-                $player = Player::where(['gameid' =>  Game::where('name', '=', $array['game'])->first()->id,'roundid' =>  Round::where(['gameid' => Game::where('name', '=', $array['game'])->first()->id, 'roundno' => number_format($array['round'])])->first()->id, 'name' =>  $array['name'], 'team' =>  $array['team'], 'no' =>  $array['no']])->first();
+                $player = Player::where(['gameid' =>  $gameid,'roundid' =>  Round::where(['gameid' => $gameid, 'roundno' => number_format($array['round']), 'active' => 1])->first()->id, 'name' =>  $array['name'], 'team' =>  $array['team'], 'no' =>  $array['no']])->first();
     
                 if(!$player) {
 
@@ -875,38 +895,31 @@ class AdminController extends Controller
     
                     foreach($customerArr[$i] as $key => $value) {
 
-                        if(str_contains($key, 'Game')) {
-                            $game = Game::where('name', '=', $value)->first();
-                            if(!!$game) {
-                                $new->gameid = $game->id;
+                        $new->gameid = $gameid;
+
+                        if(str_contains($key, 'Round')) {
+                            $round = Round::where(['gameid' => $gameid, 'roundno' => number_format($value)])->first();
+                            if(!!$round) {
+                                $new->roundid = $round->id;
                             } else {
                                 continue 2;
                             }
                         } else {
-                            if(str_contains($key, 'Round')) {
-                                $round = Round::where(['gameid' => Game::where('name', $array['game'])->first()->id, 'roundno' => number_format($value)])->first();
-                                if(!!$round) {
-                                    $new->roundid = $round->id;
-                                } else {
-                                    continue 2;
-                                }
+
+                            $key_modified = strtolower(preg_replace("/[^a-zA-Z0-9]+/", "", $key));
+
+
+                            if(in_array($key_modified, ["round", "name", "team", "no"])) {
+                                $new[strtolower(preg_replace("/[^a-zA-Z0-9]+/", "", $key))] = $value;
                             } else {
 
-                                $key_modified = strtolower(preg_replace("/[^a-zA-Z0-9]+/", "", $key));
-
-
-                                if(in_array($key_modified, ["game", "round", "name", "team", "no"])) {
-                                    $new[strtolower(preg_replace("/[^a-zA-Z0-9]+/", "", $key))] = $value;
-                                } else {
-
-                                    if(!in_array($key_modified, $detailkeys)) {
-                                        $detail[$key_modified] = $value;
-                                        array_push($detailkeys, $key_modified);
-                                    }
-
+                                if(!in_array($key_modified, $detailkeys)) {
+                                    $detail[$key_modified] = $value;
+                                    array_push($detailkeys, $key_modified);
                                 }
 
                             }
+
                         }
                     }
 
@@ -923,16 +936,9 @@ class AdminController extends Controller
 
                         $key_modified = strtolower(preg_replace("/[^a-zA-Z0-9]+/", "", $key));
 
-
-                        if(in_array($key_modified, ["game", "round", "name", "team", "no"])) {
-                            $new[strtolower(preg_replace("/[^a-zA-Z0-9]+/", "", $key))] = $value;
-                        } else {
-
-                            if(!in_array($key_modified, $detailkeys)) {
-                                $detail[$key_modified] = $value;
-                                array_push($detailkeys, $key_modified);
-                            }
-
+                        if(!in_array($key_modified, ["round", "name", "team", "no"]) && !in_array($key_modified, $detailkeys)) {
+                            $detail[$key_modified] = $value;
+                            array_push($detailkeys, $key_modified);
                         }
                         
                     }
@@ -949,40 +955,30 @@ class AdminController extends Controller
         return redirect()->route('players');
     }
 
-    public function csvToArray($filename = '', $delimiter = ',') {
-
-        if (!file_exists($filename) || !is_readable($filename))
-            return false;
-
-        $header = null;
-        $data = array();
-        try {
-
-            if (($handle = fopen($filename, 'r')) !== false)
-            {
-                while (($row = fgetcsv($handle, 1000, $delimiter)) !== false)
-                {
-                    if (!$header)
-                        $header = $row;
-                    else
-                        $data[] = array_combine($header, $row);
-                }
-                fclose($handle);
-            }
-
-        } catch(Exception $e) {
-
-            return redirect()->route('players.new');
-        }
-        
-        return $data;
-    }
-
     public function uploadPoint(Request $request) {
+
+        $validator = Validator::make($request->all(),
+        [
+            'gameid' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
 
         $path = $request->file('file')->getRealPath();
 
-        $pointArr = $this->csvToArray($path);
+        $type = $request->file('file')->getClientOriginalExtension();
+
+        $gameid = $request->gameid;
+
+        if($type == "csv") {
+            $pointArr = $this->csvToArray($path);
+        }
+
+        if($type == "xlsx") {
+            $pointArr = $this->excelToArray($path);
+        }
 
         try {
             for ($i = 0; $i < count($pointArr); $i ++)
@@ -995,11 +991,11 @@ class AdminController extends Controller
                     array_push($keys, strtolower(preg_replace("/[^a-zA-Z0-9]+/", "", $key)));
                 }
 
-                if(!count(array_intersect($keys, ['game', 'round', 'team', 'no'])) == 4) {
+                if(!count(array_intersect($keys, ['round', 'team', 'no'])) == 4) {
                     return redirect()->back()->withInput();
                 }
 
-                $player = Player::where(['gameid' => Game::where('name', $array['game'])->first()->id, 'roundid' => Round::where(['gameid' => Game::where('name', $array['game'])->first()->id, 'roundno' => $array['round']])->first()->id, 'team' => $array['team'], 'no' => $array['no']])->first();
+                $player = Player::where(['gameid' => $gameid, 'roundid' => Round::where(['gameid' => $gameid, 'roundno' => $array['round']])->first()->id, 'team' => $array['team'], 'no' => $array['no']])->first();
 
                 if(!!$player) {
 
@@ -1020,7 +1016,7 @@ class AdminController extends Controller
 
                             $keypairs[$key_modified] = $key;
 
-                            if(!in_array($key_modified, ["game", "round", "team", "no", "total"])) {
+                            if(!in_array($key_modified, ["round", "team", "no", "total"])) {
 
                                 if(!in_array($key_modified, $detailkeys)) {
                                     $detail[$key_modified] = $value;
@@ -1060,7 +1056,7 @@ class AdminController extends Controller
 
                             $keypairs[$key_modified] = $key;
                 
-                            if(!in_array($key_modified, ["game", "round", "team", "no", "total"])) {
+                            if(!in_array($key_modified, ["round", "team", "no", "total"])) {
 
                                 if(!in_array($key_modified, $detailkeys)) {
                                     $detail[$key_modified] = $value;
@@ -1098,7 +1094,8 @@ class AdminController extends Controller
     }
 
     public function points() {
-        return view('admin.point.upload');
+        $games = Game::where('active', 1)->get();
+        return view('admin.point.upload', compact('games'));
     }
     public function pointedit($id) {
 
@@ -1212,7 +1209,7 @@ class AdminController extends Controller
 
         $games = Game::where('state', 2)->get();
 
-        // try {
+        try {
 
             for($index = 0 ; $index < count($games) ; $index ++) {
     
@@ -1268,9 +1265,9 @@ class AdminController extends Controller
 
             return 1;
 
-        // } catch (Exception $e) {
-        //     return 0;
-        // }
+        } catch (Exception $e) {
+            return 0;
+        }
 
     }
 
@@ -1285,5 +1282,59 @@ class AdminController extends Controller
         if($request->name != $key) {
             return redirect()->back()->withInput();
         }
+    }
+
+    public function excelToArray($path) {
+
+        if ( $xlsx = SimpleXLSX::parse($path) ) {
+
+            if($xlsx->rows(1)) {
+                $data = $xlsx->rows(1);
+            } else {
+                $data = $xlsx->rows();
+            }
+
+            $header_values = $rows = [];
+
+            foreach ( $data as $k => $r ) {
+                if ( $k === 0 ) {
+                    $header_values = $r;
+                    continue;
+                }
+                $rows[] = array_combine( $header_values, $r );
+            }
+            return $rows;
+        } else {
+            return SimpleXLSX::parseError();
+        }
+    }
+
+    public function csvToArray($filename = '', $delimiter = ',') {
+
+        if (!file_exists($filename) || !is_readable($filename))
+            return false;
+
+        $header = null;
+        $data = array();
+        try {
+
+            if (($handle = fopen($filename, 'r')) !== false)
+            {
+                while (($row = fgetcsv($handle, 1000, $delimiter)) !== false)
+                {
+                    if (!$header)
+                        $header = $row;
+                    else
+                        $data[] = array_combine($header, $row);
+                }
+                fclose($handle);
+            }
+
+        } catch(Exception $e) {
+
+            return redirect()->route('players.new');
+        }
+        
+        return $data;
     }
 }

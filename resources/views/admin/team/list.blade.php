@@ -47,7 +47,6 @@
                                                 </div>
                                                 <div class="modal-body">
                                                     <p class="font-24">Do you want to remove this team?</p>
-                                                    <p class="font-24">All the fixtures related with this team will be removed.</p>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-primary float-left" data-dismiss="modal">No</button>

@@ -34,6 +34,7 @@ Route::get('/shop', 'CommonController@shop')->name('shop');
 Route::get('/team', 'CommonController@team')->name('team');
 Route::get('/wishlist', 'CommonController@wishlist')->name('wishlist');
 Route::get('/contact', 'CommonController@contact')->name('contact');
+Route::post('/contact', 'CommonController@sendEmail')->name('contact.send');
 
 // Guest routes
 Route::get('/submit/{id}', 'CommonController@submit')->name('submit');

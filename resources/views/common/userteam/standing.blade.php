@@ -20,7 +20,7 @@
                     <div class="mt-0 mb-20">
                         <h4>Select Expired Games</h4>
                         <select class="normal-component maxwidth-200" onchange="getResultsByGameId(this)">
-                            <option value="all">Total</option>
+                            <option disabled selected>Select Game</option>
                             @if(isset($games) && count($games) > 0)
                                 @foreach($games as $key => $item)
                                     <option value={{$item['id']}} @if(isset($game) && $game == $item['id']) selected @endif>{{$item['name']}}</option>
@@ -38,8 +38,8 @@
                             <select class="normal-component maxwidth-200" onchange="getResultsByRoundId(this)">
                                 <option value="all">Total</option>
                                 @if(isset($rounds) && count($rounds) > 0)
-                                    @foreach($rounds as $key => $round)
-                                        <option value={{$round['id']}} @if(isset($round) && $round == $round['id']) selected @endif>{{$round['roundno']}}</option>
+                                    @foreach($rounds as $key => $item)
+                                        <option value={{$item['id']}} @if(isset($round) && $round == $item['id']) selected @endif>{{$item['roundno']}}</option>
                                     @endforeach
                                 @endif
                             </select>
@@ -53,28 +53,22 @@
                                 <tr>
                                     <th>Team</th>
                                     <th>round</th>
-                                    <th>G</th>
-                                    <th>D1</th>
-                                    <th>D2</th>
-                                    <th>M1</th>
-                                    <th>M2</th>
-                                    <th>F1</th>
-                                    <th>F2</th>
+                                    <th>Detail</th>
                                     <th>Point</th>
                                     <th>PointDetail</th>
                                 </tr>
                                 @if(isset($teams) && count($teams) > 0)
                                     @foreach($teams as $key => $item)
                                         <tr>
-                                            <td>{{App\User::find($item["userid"])["teamname"]}}</td>
-                                            <td>{{App\Model\Round::find($item["round"])["roundno"] }}</td>
-                                            <td>{{App\Model\Player::find($item["g"])["name"]}}</td>
-                                            <td>{{App\Model\Player::find($item["d1"])["name"]}}</td>
-                                            <td>{{App\Model\Player::find($item["d2"])["name"]}}</td>
-                                            <td>{{App\Model\Player::find($item["m1"])["name"]}}</td>
-                                            <td>{{App\Model\Player::find($item["m2"])["name"]}}</td>
-                                            <td>{{App\Model\Player::find($item["f1"])["name"]}}</td>
-                                            <td>{{App\Model\Player::find($item["f2"])["name"]}}</td>
+                                            <td>{{App\Model\GameUser::where(['userid' => $item['userid'], 'gameid' => $item['gameid']])->first()->teamname}}</td>
+                                            <td>{{App\Model\Round::find($item["roundid"])["roundno"] }}</td>
+                                            <td class="maxwidth-200">
+                                                @if(isset($item->detail))
+                                                    @foreach(json_decode($item->detail) as $key=>$value)
+                                                        {{$key}} : {{App\Model\Player::find($value)['name'] }}
+                                                    @endforeach
+                                                @endif
+                                            </td>
                                             <td>{{$item['point']}}</td>
                                             <td>
                                                 @if(!!$item["point"])
@@ -96,7 +90,7 @@
                                 @if(isset($teams) && count($teams) > 0)
                                     @foreach($teams as $key => $item)
                                         <tr>
-                                            <td>{{App\User::find($item["userid"])["teamname"]}}</td>
+                                            <td>{{App\Model\GameUser::where(['userid' => $item['userid'], 'gameid' => $item['gameid']])->first()->teamname}}</td>
                                             <td>{{$item['point']}}</td>
                                         </tr>
                                     @endforeach

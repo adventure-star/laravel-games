@@ -68,7 +68,7 @@
                 <div class="row">
                     <div class="col-sm-6 col-xs-12">
                         <p class="text-left-center py-4">
-                            <a href="{{route('questions')}}" class="underline text-primary text-xl-right">All Questions</a>
+                            <a href="{{route('questions')}}?game={{App\Model\Question::find($id)->gameid}}" class="underline text-primary text-xl-right">All Questions</a>
                         </p>
                     </div>
                     <div class="col-sm-6 col-xs-12">

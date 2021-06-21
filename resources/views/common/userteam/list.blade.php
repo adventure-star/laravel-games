@@ -53,8 +53,8 @@
                     <div class="table-responsive fixtures-table">
                         <table class="table">
                             <tr>
-                                <th>TeamName</th>
-                                <th>round</th>
+                                <th>Team</th>
+                                <th>Round</th>
                                 <th>Detail</th>
                                 @if(Auth::user()->isadmin == 1)
                                     <th>Remove</th>
@@ -98,7 +98,6 @@
                                                         </div>
                                                         <div class="modal-body">
                                                             <p class="font-24">Do you want to remove this userteam?</p>
-                                                            <p class="font-14">All the results for this userteam will be removed.</p>
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-primary float-left" data-dismiss="modal">No</button>

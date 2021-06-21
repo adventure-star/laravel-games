@@ -51,7 +51,6 @@
                                                 </div>
                                                 <div class="modal-body">
                                                     <p class="font-24">Do you want to remove this round?</p>
-                                                    <p class="font-14">All data related with this round(Fixtures, Players, Questions, Qinputs, Teams, Points, Results) will be removed.</p>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-primary float-left" data-dismiss="modal">No</button>

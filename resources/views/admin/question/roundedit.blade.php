@@ -50,7 +50,6 @@
                                                 </div>
                                                 <div class="modal-body">
                                                     <p class="font-24">Do you want to remove this question?</p>
-                                                    <p class="font-14">All data related with Qinputs will be removed.</p>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-primary float-left" data-dismiss="modal">No</button>
