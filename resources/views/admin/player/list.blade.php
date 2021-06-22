@@ -48,10 +48,10 @@
                 <div class="table-responsive fixtures-table">
                     <table class="table">
                         <tr>
-                            <th>Name</th>
+                            <th>ID</th>
                             <th>Team</th>
+                            <th>Name</th>
                             <th>No</th>
-                            <th>Round</th>
                             <th>Edit</th>
                             <th>Point</th>
                             <th>New/Edit</th>
@@ -60,14 +60,14 @@
                         @if(isset($players) && count($players) > 0)
                             @foreach($players as $key => $item)
                                 <tr>
-                                    <td>{{$item["name"]}}</td>
+                                    <td>{{App\Model\Player::find($item["playerid"])->playerid}}</td>
                                     <td>{{$item["team"]}}</td>
+                                    <td>{{$item["name"]}}</td>
                                     <td>{{$item["no"]}}</td>
-                                    <td>{{App\Model\Round::find($item["roundid"])['roundno']}}</td>
                                     <td>
                                         <a href="{{route('players.edit', $item['id'])}}" class="btn btn-success-rgba"><i class="fa fa-edit"></i></a>
                                     </td>
-                                    <td>{{App\Model\Point::where('playerid', $item["id"])->first() ? App\Model\Point::where('playerid', $item["id"])->first()->total : ""}}</td>
+                                    <td>{{App\Model\Point::where('roundplayerid', $item["id"])->first() ? App\Model\Point::where('roundplayerid', $item["id"])->first()->total : ""}}</td>
                                     <td>
                                         <a href="{{route('players.pointedit', $item['id'])}}" class="btn btn-success-rgba"><i class="fa fa-edit"></i></a>
                                     </td>

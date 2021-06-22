@@ -15,24 +15,27 @@
         <div class="row">
             
             <div class="col-md-10 col-md-offset-1 col-xs-12 text-center">
+
+                <h4>Players of "{{App\Model\Game::find($game)->name}}"</h4>
+
                 <!-- Fixtures Table -->
                 <div class="table-responsive fixtures-table">
                     <table class="table">
                         <tr>
-                            <th>Game</th>
+                            <th>ID</th>
+                            <th>Team</th>
                             <th>Name</th>
-                            <th>Abbreviation</th>
                             <th>Edit</th>
                             <th>Remove</th>
                         </tr>
-                        @if(isset($teams) && count($teams) > 0)
-                            @foreach($teams as $key => $item)
+                        @if(isset($players) && count($players) > 0)
+                            @foreach($players as $key => $item)
                                 <tr>
-                                    <td>{{App\Model\Game::find($item["gameid"])->name}}</td>
-                                    <td>{{$item["longname"]}}</td>
-                                    <td>{{$item["shortname"]}}</td>
+                                    <td>{{$item["playerid"]}}</td>
+                                    <td>{{$item["team"]}}</td>
+                                    <td>{{$item["name"]}}</td>
                                     <td>
-                                        <a href="{{route('teams.edit', $item['id'])}}" class="btn btn-success-rgba"><i class="fa fa-edit"></i></a>
+                                        <a href="{{route('games.players.edit', $item['id'])}}" class="btn btn-success-rgba"><i class="fa fa-edit"></i></a>
                                     </td>
                                     <td>
                                         <a class="btn btn-success-rgba" data-toggle="modal" data-target="#deletemodal{{$item['id']}}"><i class="fa fa-remove"></i></a>
@@ -50,11 +53,11 @@
                                 
                                                 </div>
                                                 <div class="modal-body">
-                                                    <p class="font-24">Do you want to remove this team?</p>
+                                                    <p class="font-24">Do you want to remove this player?</p>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-primary float-left" data-dismiss="modal">No</button>
-                                                    <button type="button" class="btn btn-danger" onclick="deleteTeam({{$item['id']}})">Yes</button>
+                                                    <button type="button" class="btn btn-danger" onclick="deletePlayer({{$item['id']}})">Yes</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -64,15 +67,16 @@
                         @endif
                     </table>
                 </div>
+                <div class="row">
+                    <div class="col-sm-12 col-xs-12">
+                        <p class="text-right-center py-4">
+                            <a href="{{route('games.players.new', $game)}}" class="underline text-primary text-xl-right">Add New Player</a>
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-10 col-md-offset-1 col-xs-12">
-                <p class="text-right py-4">
-                    <a href="{{route('teams.new')}}" class="underline text-primary text-xl-right">Add New Team</a>
-                </p>
-            </div>
-        </div>
+        
     </div>
 </div>
 <!-- Fixtures Area End -->
@@ -81,11 +85,11 @@
 
 @section('scripts')
     <script>
-        function deleteTeam(id) {
+        function deletePlayer(id) {
 
             $.ajax({
                 method: "post",
-                url: "{{route('teams.delete')}}",
+                url: "{{route('players.delete')}}",
                 headers: {
                     'X-CSRF-TOKEN': '<?= csrf_token() ?>'
                 },
@@ -97,7 +101,7 @@
                 async: true,
                 success: function (data) {
                     if(data) {
-                        window.location = "{{route('teams')}}";
+                        window.location = "{{route('games.players')}}?game={{$game}}";
                     }
                 },
                 error: function () {
@@ -106,5 +110,4 @@
             });
         }
     </script>
-
 @endsection

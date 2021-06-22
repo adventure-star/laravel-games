@@ -87,6 +87,18 @@ Route::post('/players/point/update', 'AdminController@pointupdateorsave')->name(
 Route::post('/players/update', 'AdminController@playerupdate')->name('players.update');
 Route::post('/players/delete', 'AdminController@playerdelete')->name('players.delete');
 
+
+
+Route::get('/games/players', 'AdminController@playersforgames')->name('games.players');
+
+Route::get('/games/players/new/{id}', 'AdminController@playerforgamesnew')->name('games.players.new');
+Route::post('/games/players/add', 'AdminController@playerforgamesadd')->name('games.players.new.save');
+Route::get('/games/players/edit/{id}', 'AdminController@playerforgamesedit')->name('games.players.edit');
+Route::post('/games/players/update', 'AdminController@playerforgamesupdate')->name('games.players.update');
+Route::post('/games/players/delete', 'AdminController@playerforgamesdelete')->name('games.players.delete');
+
+
+
 Route::get('/users', 'AdminController@users')->name('users');
 Route::post('/users/delete', 'AdminController@userdelete')->name('users.delete');
 Route::post('/users/paid', 'AdminController@userpaidstatechange')->name('users.paid');
@@ -135,4 +147,8 @@ Route::get('/finalstanding/{id}', 'CommonController@getFinalStanding')->name('fi
 
 Route::post('/games/register', 'CommonController@gameregister')->name('games.register');
 
-// Route::get('/test', 'CommonController@test')->name('test');
+
+Route::post('/roundplayers/upload', 'AdminController@uploadroundplayer')->name('uploads.roundplayer');
+Route::post('/abbs/upload', 'AdminController@uploadabbs')->name('uploads.abbs');
+Route::get('/roundplayers/new', 'AdminController@roundplayernew')->name('roundplayer.new');
+Route::post('/roundplayers', 'AdminController@uploadroundplayer')->name('roundplayer.add');

@@ -13,6 +13,7 @@ use App\Model\QInput;
 use App\Model\Question;
 use App\Model\RealTeam;
 use App\Model\Round;
+use App\Model\RoundPlayer;
 use App\Model\Team;
 use Exception;
 use Facade\FlareClient\Http\Response;
@@ -43,7 +44,7 @@ class CommonController extends Controller
             $this->fromEmail = $request->email;
             $this->subject = $request->subject;
     
-            $this->mailer->send('layouts.email', ['name'=>$request->name, 'phone'=>$request->phone, 'message'=>$request->message], function (Message $m){
+            $this->mailer->send('layouts.email', ['name'=>$request->name, 'message'=>$request->message], function (Message $m){
                 $m->from($this->fromEmail)->to($this->admin_email)->subject($this->subject);
             });
 
@@ -118,21 +119,29 @@ class CommonController extends Controller
 
         $details = json_decode($other->details);
 
-        $players = Player::where(['gameid' => $id, 'roundid' => $round])->get();
+        $players = RoundPlayer::where(['players.gameid' => $id, 'roundid' => $round])
+                ->leftJoin('players', 'roundplayers.playerid', '=', 'players.id')
+                ->selectRaw('roundplayers.*, players.team as team, players.name as name, players.detail as detail, players.active as active')
+                ->where('players.active', 1)
+                ->get();
 
         $questions = Question::where(['gameid' => $id, 'roundid' => $round])->get();
 
+        $teams = RealTeam::where('gameid', $id)->get();
+
+
         if(!Auth::User()) {
-            return view('guest.submit', compact('rounds', 'id', 'category', 'details', 'round', 'players', 'questions'));
+            return view('guest.submit', compact('rounds', 'id', 'category', 'details', 'round', 'players', 'questions', 'teams'));
         }
 
         $olddata = Team::where(['userid' => Auth::user()->id, 'gameid' => $id, 'roundid' => $round])->first();
 
+
         if($olddata) {
             $olddetail = get_object_vars(json_decode($olddata->detail));
-            return view('guest.submit', compact('rounds', 'id', 'category', 'details', 'round', 'players', 'questions', 'olddetail'));
+            return view('guest.submit', compact('rounds', 'id', 'category', 'details', 'round', 'players', 'questions', 'olddetail', 'teams'));
         } else {
-            return view('guest.submit', compact('rounds', 'id', 'category', 'details', 'round', 'players', 'questions'));
+            return view('guest.submit', compact('rounds', 'id', 'category', 'details', 'round', 'players', 'questions', 'teams'));
         }
 
     }

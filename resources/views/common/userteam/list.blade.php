@@ -74,7 +74,7 @@
                                         <td class="maxwidth-200">
                                             @if(isset($item->detail))
                                                 @foreach(json_decode($item->detail) as $key=>$value)
-                                                    {{$key}} : {{App\Model\Player::find($value)['name'] }}
+                                                    {{$key}} : {{App\Model\Player::find(App\Model\RoundPlayer::find($value)['playerid'])->name}}
                                                 @endforeach
                                             @endif
                                         </td>

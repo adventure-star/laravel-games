@@ -26,6 +26,7 @@
                             <th>Deadline</th>
                             <th>Rounds</th>
                             <th>Settings</th>
+                            <th>Players</th>
                             <th>Edit</th>
                             <th>Remove</th>
                         </tr>
@@ -41,6 +42,9 @@
                                     </td>
                                     <td>
                                         <a href="{{route('games.settings', $item['id'])}}" class="btn btn-success-rgba"><i class="fa fa-cube"></i></a>
+                                    </td>
+                                    <td>
+                                        <a href="{{route('games.players')}}?game={{$item['id']}}" class="btn btn-success-rgba"><i class="fa fa-play"></i></a>
                                     </td>
                                     <td>
                                         <a href="{{route('games.edit', $item['id'])}}" class="btn btn-success-rgba"><i class="fa fa-edit"></i></a>

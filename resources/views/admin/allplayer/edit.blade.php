@@ -16,53 +16,29 @@
             <!-- Contact Form -->
             <div class="col-sm-10 col-sm-offset-1 col-xs-12 mb-30">
                 <div class="submit-form">
-                    <form id="submit-form" action="{{route('players.update')}}" method="post">
+                    <form id="submit-form" action="{{route('games.players.update')}}" method="post">
                         @csrf
                         <h4>Edit Player</h4>
                         <input class="hidden" name="id" value={{$id}} />
                         <div class="row">
                             <div class="col-md-12 col-xs-12">
                                 <div class="w-100 maxwidth-200 mx-auto">
-                                    <p class="player-label">Game</p>
-                                    <input type="hidden" name="gameid" value="{{$player['gameid']}}" />
-                                    <input type="text" class="titleinput" @if(isset($player['gameid'])) value="{{$player['gameid']}}" @endif readonly disabled />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12 col-xs-12">
-                                <div class="w-100 maxwidth-200 mx-auto">
-                                    <h4>Select Player</h4>
-                                    <input type="hidden" name="playerid" value="{{$player['playerid']}}" />
-                                    <input type="text" class="titleinput" @if(isset($player['playerid'])) value="{{App\Model\Player::find($player['playerid'])['name']}}({{App\Model\Player::find($player['playerid'])['team']}})" @endif readonly disabled />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12 col-xs-12">
-                                <div class="w-100 maxwidth-200 mx-auto">
-                                    <h4>Select Round</h4>
-                                    <select class="normal-component maxwidth-200" name="roundid" required>
-                                        @if(isset($rounds) && count($rounds) > 0)
-                                            @foreach($rounds as $key => $item)
-                                                <option value={{$item['id']}} @if(isset($player['roundid']) && $player['roundid'] == $item['id']) selected @endif>{{$item['roundno']}}</option>
-                                            @endforeach
-                                        @endif
-                                    </select>
+                                    <p class="player-label">ID</p>
+                                    <input type="number" name="playerid" @if(isset($player)) value="{{$player["playerid"]}}"@endif />
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 col-xs-12">
                                 <div class="w-100 maxwidth-200 mx-auto">
-                                    <p class="player-label">Cat</p>
-                                    <input type="text" name="cat" class="titleinput" @if(isset($player['cat'])) value="{{$player['cat']}}" @endif required />
+                                    <p class="player-label">Team</p>
+                                    <input type="text" name="team" @if(isset($player)) value="{{$player["team"]}}"@endif />
                                 </div>
                             </div>
                             <div class="col-md-6 col-xs-12">
                                 <div class="w-100 maxwidth-200 mx-auto">
-                                    <p class="player-label">No</p>
-                                    <input type="number" name="no" @if(isset($player['no'])) value="{{$player['no']}}" @endif required />
+                                    <p class="player-label">Name</p>
+                                    <input type="text" name="name" @if(isset($player)) value="{{$player["name"]}}"@endif />
                                 </div>
                             </div>
                         </div>

@@ -15,7 +15,10 @@ class CreateRealteamsTable extends Migration
     {
         Schema::create('realteams', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->unsignedBigInteger('gameid');
+            $table->string('longname');
+            $table->string('shortname')->nullable();
+            $table->string('active')->default(1);
             $table->timestamps();
         });
     }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePointsTable extends Migration
+class CreateRoundplayersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,13 @@ class CreatePointsTable extends Migration
      */
     public function up()
     {
-        Schema::create('points', function (Blueprint $table) {
+        Schema::create('roundplayers', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('roundplayerid');
-            $table->integer('total')->default(0)->nullable();
+            $table->unsignedBigInteger('gameid');
+            $table->unsignedBigInteger('roundid');
+            $table->unsignedBigInteger('playerid');
+            $table->string('cat')->nullable();
+            $table->unsignedBigInteger('no');
             $table->json('detail')->nullable();
             $table->integer('active')->default(1);
             $table->timestamps();
@@ -30,6 +33,6 @@ class CreatePointsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('points');
+        Schema::dropIfExists('roundplayers');
     }
 }

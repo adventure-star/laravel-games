@@ -23,8 +23,16 @@
                         <div class="row">
                             <div class="col-md-6 col-md-offset-3 col-xs-12">
                                 <div class="w-100 maxwidth-200 mx-auto">
-                                    <p class="player-label">Name</p>
-                                    <input type="text" name="name" @if(isset($team)) value="{{$team["name"]}}"@endif />
+                                    <p class="player-label">Long Name</p>
+                                    <input type="text" name="longname" @if(isset($team)) value="{{$team["longname"]}}"@endif />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-md-offset-3 col-xs-12">
+                                <div class="w-100 maxwidth-200 mx-auto">
+                                    <p class="player-label">Short Name</p>
+                                    <input type="text" name="shortname" @if(isset($team)) value="{{$team["shortname"]}}"@endif />
                                 </div>
                             </div>
                         </div>

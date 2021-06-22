@@ -10,7 +10,6 @@
     <h3>To Sofa League</h3>
     <hr />
     <p>Name: {{$name}}</p>
-    <p>Phone: {{$phone}}</p>
     <hr />
     <p>{{$message}}</p>
 </body>

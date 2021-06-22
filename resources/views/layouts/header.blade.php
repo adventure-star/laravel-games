@@ -21,7 +21,7 @@
                                         <li @if(Route::is('users'))class="active"@endif><a href={{route('users')}}>users</a></li>
                                         <li @if(Route::is('games') || Route::is('rounds') || Route::is('rounds.new') || Route::is('rounds.edit'))class="active"@endif><a href={{route('games')}}>games</a></li>
                                         {{-- <li @if(Route::is('rounds') || Route::is('rounds.new') || Route::is('rounds.edit'))class="active"@endif><a href={{route('rounds')}}>rounds</a></li> --}}
-                                        {{-- <li @if(Route::is('teams') || Route::is('teams.new') || Route::is('teams.edit'))class="active"@endif><a href={{route('teams')}}>teams</a></li> --}}
+                                        <li @if(Route::is('teams') || Route::is('teams.new') || Route::is('teams.edit'))class="active"@endif><a href={{route('teams')}}>teams</a></li>
                                         {{-- <li @if(Route::is('fixtures') || Route::is('fixtures.new') || Route::is('fixtures.edit'))class="active"@endif><a href={{route('fixtures')}}>fixtures</a></li> --}}
                                         <li @if(Route::is('players') || Route::is('players.new') || Route::is('players.edit'))class="active"@endif><a href={{route('players')}}>players</a></li>
                                         <li @if(Route::is('questions') || Route::is('questions.new') || Route::is('questions.edit') || Route::is('questions.answers') || Route::is('questions.round.edit') || Route::is('qinputs.new') || Route::is('qinputs.edit'))class="active"@endif><a href={{route('questions')}}>questions</a></li>
@@ -51,67 +51,81 @@
                                     @else
                                         {{-- <li @if(Route::is('submit'))class="active"@endif><a href={{route('submit')}}>game</a></li>
                                         <li @if(Route::is('rule'))class="active"@endif><a href={{route('rule')}}>rules</a></li> --}}
-                                        
-                                        <li @if(Route::is('games.joined') || Route::is('games.open'))class="active"@endif>
-                                            @if(!Route::is('games.joined') && !Route::is('games.open'))
-                                                <a href={{route('games.joined')}}>My Games</a>
-                                                <ul>
-                                                    <li><a href={{route('games.open')}}>Open Games</a></li>
-                                                </ul>
-                                            @endif
-                                            @if(Route::is('games.joined'))
-                                                <a href={{route('games.joined')}}>My Games</a>
-                                                <ul>
-                                                    <li><a href={{route('games.open')}}>Open Games</a></li>
-                                                </ul>
-                                            @endif
-                                            @if(Route::is('games.open'))
-                                                <a href={{route('games.open')}}>Open Games</a>
-                                                <ul>
-                                                    <li><a href={{route('games.joined')}}>My Games</a></li>
-                                                </ul>
-                                            @endif
-                                        </li>
-                                        <li @if(Route::is('games.calendar'))class="active"@endif><a href={{route('games.calendar')}}>Game Calendar</a></li>
-                                        <li @if(Route::is('games.ended') || Route::is('finalstanding'))class="active"@endif><a href={{route('games.ended')}}>Ended Games</a></li>
-                                        <li @if(Route::is('userteams'))class="active"@endif><a href={{route('userteams')}}>my teams</a></li>
 
-                                        @if(Auth::user()->ispaid == 1)
-                                            <li @if(Route::is('standing') || Route::is('groupstanding'))class="active"@endif>
-                                                @if(!Route::is('standing') && !Route::is('groupstanding'))
-                                                    <a href={{route('standing')}}>Standing</a>
+                                        @if(Route::is('submit') || Route::is('rule') || Route::is('userteams') || Route::is('standing') || Route::is('groupstanding'))
+                                            <li @if(Route::is('games.joined'))class="active"@endif><a href={{route('games.joined')}}>GAME</a></li>
+                                            <li @if(Route::is('rule'))class="active"@endif><a href={{route('rule')}}>RULE</a></li>
+                                            <li @if(Route::is('userteams'))class="active"@endif><a href={{route('userteams')}}>my teams</a></li>
+                                            @if(Auth::user()->ispaid == 1)
+                                                <li @if(Route::is('standing') || Route::is('groupstanding'))class="active"@endif>
+                                                    @if(!Route::is('standing') && !Route::is('groupstanding'))
+                                                        <a href={{route('standing')}}>Standing</a>
+                                                        <ul>
+                                                            <li><a href={{route('groupstanding')}}>Group Standing</a></li>
+                                                        </ul>
+                                                    @endif
+                                                    @if(Route::is('standing'))
+                                                        <a href={{route('standing')}}>Standing</a>
+                                                        <ul>
+                                                            <li><a href={{route('groupstanding')}}>Group Standing</a></li>
+                                                        </ul>
+                                                    @endif
+                                                    @if(Route::is('groupstanding'))
+                                                        <a href={{route('groupstanding')}}>Group Standing</a>
+                                                        <ul>
+                                                            <li><a href={{route('standing')}}>Standing</a></li>
+                                                        </ul>
+                                                    @endif
+                                                </li>
+                                                {{-- <li @if(Route::is('groupstanding'))class="active"@endif><a href={{route('groupstanding')}}>group standing</a></li> --}}
+                                            @else
+                                                <li @if(Route::is('standing'))class="active"@endif><a href={{route('standing')}}>standing</a></li>
+                                            @endif
+                                        @else
+                                            <li @if(Route::is('games.joined') || Route::is('games.open'))class="active"@endif>
+                                                @if(!Route::is('games.joined') && !Route::is('games.open'))
+                                                    <a href={{route('games.joined')}}>My Games</a>
                                                     <ul>
-                                                        <li><a href={{route('groupstanding')}}>Group Standing</a></li>
+                                                        <li><a href={{route('games.open')}}>Open Games</a></li>
                                                     </ul>
                                                 @endif
-                                                @if(Route::is('standing'))
-                                                    <a href={{route('standing')}}>Standing</a>
+                                                @if(Route::is('games.joined'))
+                                                    <a href={{route('games.joined')}}>My Games</a>
                                                     <ul>
-                                                        <li><a href={{route('groupstanding')}}>Group Standing</a></li>
+                                                        <li><a href={{route('games.open')}}>Open Games</a></li>
                                                     </ul>
                                                 @endif
-                                                @if(Route::is('groupstanding'))
-                                                    <a href={{route('groupstanding')}}>Group Standing</a>
+                                                @if(Route::is('games.open'))
+                                                    <a href={{route('games.open')}}>Open Games</a>
                                                     <ul>
-                                                        <li><a href={{route('standing')}}>Standing</a></li>
+                                                        <li><a href={{route('games.joined')}}>My Games</a></li>
                                                     </ul>
                                                 @endif
                                             </li>
-                                            {{-- <li @if(Route::is('groupstanding'))class="active"@endif><a href={{route('groupstanding')}}>group standing</a></li> --}}
-                                        @else
-                                            <li @if(Route::is('standing'))class="active"@endif><a href={{route('standing')}}>standing</a></li>
+                                            <li @if(Route::is('games.calendar'))class="active"@endif><a href={{route('games.calendar')}}>Game Calendar</a></li>
+                                            <li @if(Route::is('games.ended') || Route::is('finalstanding'))class="active"@endif><a href={{route('games.ended')}}>Ended Games</a></li>
+                                            <li @if(Route::is('userteams'))class="active"@endif><a href={{route('userteams')}}>my teams</a></li>
+
+                                            
+                                            <li @if(Route::is('contact'))class="active"@endif><a href={{route('contact')}}>Contact</a></li>
                                         @endif
-                                        <li @if(Route::is('contact'))class="active"@endif><a href={{route('contact')}}>Contact</a></li>
                                     @endif
                                 @else
                                     {{-- <li @if(Route::is('submit'))class="active"@endif><a href={{route('submit')}}>game</a></li>
                                     <li @if(Route::is('rule'))class="active"@endif><a href={{route('rule')}}>rules</a></li>
                                     <li @if(Route::is('standing'))class="active"@endif><a href={{route('standing')}}>standing</a></li> --}}
 
-                                    <li @if(Route::is('games.open'))class="active"@endif><a href={{route('games.open')}}>Open Games</a></li>
-                                    <li @if(Route::is('games.calendar'))class="active"@endif><a href={{route('games.calendar')}}>Game Calendar</a></li>
-                                    <li @if(Route::is('games.ended') || Route::is('finalstanding'))class="active"@endif><a href={{route('games.ended')}}>Ended Games</a></li>
-                                    <li @if(Route::is('contact'))class="active"@endif><a href={{route('contact')}}>Contact</a></li>
+                                    @if(Route::is('submit') || Route::is('rule') || Route::is('standing'))
+                                            <li @if(Route::is('submit') )class="active"@endif><a href={{route('games.open')}}>GAME</a></li>
+                                            <li @if(Route::is('rule'))class="active"@endif><a href={{route('rule')}}>RULE</a></li>
+                                            <li @if(Route::is('standing'))class="active"@endif><a href={{route('standing')}}>standing</a></li>
+                                        @else
+                                            <li @if(Route::is('games.open'))class="active"@endif><a href={{route('games.open')}}>Open Games</a></li>
+                                            <li @if(Route::is('games.calendar'))class="active"@endif><a href={{route('games.calendar')}}>Game Calendar</a></li>
+                                            <li @if(Route::is('games.ended') || Route::is('finalstanding'))class="active"@endif><a href={{route('games.ended')}}>Ended Games</a></li>
+                                            <li @if(Route::is('contact'))class="active"@endif><a href={{route('contact')}}>Contact</a></li>
+                                        @endif
+                      
                                 @endif
                                 {{-- <li><a href={{route('pointtable')}}>point table</a></li> --}}
                                 {{-- <li><a href={{route('blog')}}>blog</a>

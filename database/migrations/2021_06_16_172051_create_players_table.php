@@ -16,10 +16,9 @@ class CreatePlayersTable extends Migration
         Schema::create('players', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('gameid');
-            $table->unsignedBigInteger('roundid');
-            $table->string('name')->nullable();
+            $table->unsignedBigInteger('playerid');
             $table->string('team')->nullable();
-            $table->string('no')->nullable();
+            $table->string('name')->nullable();
             $table->json('detail')->nullable();
             $table->integer('active')->default(1);
             $table->timestamps();

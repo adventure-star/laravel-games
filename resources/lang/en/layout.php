@@ -3,7 +3,6 @@
 return [
 
     'users' => 'Users',
-    'games' => 'Games',
     'players' => 'Players',
     'questions' => 'Questions',
     'userteams' => 'UserTeams',

@@ -51,8 +51,8 @@
                                                                 <option disabled selected>Select Player</option>
                                                                 @if(isset($players) && count($players) > 0)
                                                                     @foreach($players as $key1 => $player)
-                                                                        @if(json_decode($player->detail)->$category == $key)
-                                                                            <option value="{{$player['id']}}" @if(isset($olddetail)) @if(isset($olddetail[$key.($i + 1)])) @if( $olddetail[$key.($i + 1)] == $player['id']) selected @endif @endif @endif>{{$player['name']}}, {{$player['team']}}</option>
+                                                                        @if($player->$category == $key)
+                                                                            <option value="{{$player['id']}}" @if(isset($olddetail)) @if(isset($olddetail[$key.($i + 1)])) @if( $olddetail[$key.($i + 1)] == $player['id']) selected @endif @endif @endif>{{App\Model\RealTeam::where('longname', $player['team'])->first() ? App\Model\RealTeam::where('longname', $player['team'])->first()->shortname : $player['team'] }}, {{$player['name']}} ({{$player['no']}})</option>
                                                                         @endif
                                                                     @endforeach
                                                                 @endif
@@ -105,9 +105,21 @@
                     
                     <div class="col-md-10 col-md-offset-1 col-xs-12 text-center">
                         <!-- Fixtures Table -->
-                        <h4>Fixtures</h4>
+                        <h4>Teams</h4>
                         <div class="table-responsive fixtures-table maxwidth-700 mx-auto mt-25">
                             <table id="fixturetable" class="table">
+                                <tr>
+                                    <th>LongName</th>
+                                    <th>ShortName</th>
+                                </tr>
+                                @if(isset($teams) && count($teams) > 0)
+                                    @foreach($teams as $key => $item)
+                                        <tr>
+                                            <td>{{$item["longname"]}}</td>
+                                            <td>{{$item["shortname"]}}</td>
+                                        </tr>
+                                    @endforeach
+                                @endif
                             </table>
                         </div>
                     </div>

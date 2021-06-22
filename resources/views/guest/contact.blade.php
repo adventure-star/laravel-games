@@ -18,7 +18,6 @@
                 <div class="contact-info">
                     <h4>Contact details</h4>
                     <p><span>address: </span> 121 King Street, Melbourne Victoria 3000 Australia</p>
-                    <p><span>phone: </span> +61 3 8376 6284</p>
                     <p><span>email: </span> <a href="#">contact@sofaleague.com</a></p>
                     <p><span>skype: </span> <a href="#">suparsport333</a></p>
                     <p><span>facebook: </span> <a href="#">www.facebook.com/suparsport</a></p>
@@ -34,7 +33,6 @@
                         @csrf
                         <input type="text" name="name" value="{{old('name')}}" placeholder="Name">
                         <input type="email" name="email" value="{{old('email')}}" placeholder="Email">
-                        <input type="text" name="phone" value="{{old('phone')}}" name="name" placeholder="Phone">
                         <input type="text" name="subject" value="{{old('subject')}}" placeholder="Subject">
                         <textarea name="message" value="{{old('message')}}" placeholder="Message"></textarea>
                         <input type="submit" value="send">
