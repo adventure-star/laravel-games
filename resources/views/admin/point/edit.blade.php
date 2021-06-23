@@ -18,7 +18,7 @@
                 <div class="submit-form">
                     <form id="submit-form" action="{{route('players.pointupdate')}}" method="post">
                         @csrf
-                        <h4>Edit Player Point</h4>
+                        <h4>{{__('admin.edit_player_point')}}</h4>
                         <input class="hidden" name="id" value={{$id}} />
                         <div id="newinputs" class="row">
                             @if(isset($detail))
@@ -32,7 +32,7 @@
                                         </div>
                                         <div class="col-md-5 col-xs-12">
                                             <div class="w-100 maxwidth-200 mx-auto">
-                                                <p class="player-label">Content</p>
+                                                <p class="player-label">{{__('common.content')}}</p>
                                                 <input type="text" value="{{$value}}" name="{{json_decode(json_decode($detail)->keypairs)->$key}}" required />
                                             </div>
                                         </div>
@@ -40,7 +40,7 @@
                                             <div class="w-100 mx-auto d-flex align-items-center">
                                                 <button type="button w-100" class="close" onclick="removeItem(this)">
                                                     <span aria-hidden="true">&times;</span>
-                                                    <span class="sr-only">Close</span>
+                                                    <span class="sr-only">{{__('common.close')}}</span>
                                                 </button>
                                             </div>
                                         </div>
@@ -56,7 +56,7 @@
                         <div class="row">
                             <div class="col-md-6 col-md-offset-3 col-xs-12">
                                 <div class="w-100 maxwidth-200 mx-auto">
-                                    <p class="player-label">Point Total</p>
+                                    <p class="player-label">{{__('common.point_total')}}</p>
                                     <input type="number" name="total" @if(isset($total)) value="{{$total}}" @else value="{{old('total')}}" @endif required/>
                                 </div>
                             </div>
@@ -80,7 +80,7 @@
                                     '<p class="player-label">Title</p><input type="text" onkeyup="changeName(this)" required />'+
                                 '</div></div>'+
                                 '<div class="col-md-5 col-xs-12"><div class="w-100 maxwidth-200 mx-auto">'+
-                                    '<p class="player-label">Content</p><input type="text" required />'+
+                                    '<p class="player-label">{{__("common.content")}}</p><input type="text" required />'+
                                 '</div></div>'+
                                 '<div class="col-md-2 col-xs-12"><div class="w-100 mx-auto d-flex align-items-center">'+
                                     '<button type="button w-100" class="close" onclick="removeItem(this)"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>'+

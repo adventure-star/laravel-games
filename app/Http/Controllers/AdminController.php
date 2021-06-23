@@ -28,6 +28,7 @@ class AdminController extends Controller
     {
         $this->middleware('auth');
         $this->middleware('admin');
+        $this->middleware('language');
     }
 
     // Operations For Games
@@ -115,7 +116,9 @@ class AdminController extends Controller
 
         if(!!$other) {
             $item = json_decode(Game::find($id)->other)->item;
-            return view('admin.game.settings', compact('id', 'game', 'item'));
+            $selector = json_decode(Game::find($id)->other)->selector;
+            $coming = json_decode(Game::find($id)->other)->coming;
+            return view('admin.game.settings', compact('id', 'game', 'item', 'selector', 'coming'));
         } else {
             return view('admin.game.settings', compact('id', 'game'));
         }
@@ -129,8 +132,10 @@ class AdminController extends Controller
         $settings = [];
 
         $settings['item'] = $request->item;
+        $settings['selector'] = $request->selector;
+        $settings['coming'] = $request->coming;
 
-        $defaults = array('gameid', 'item', '_token');
+        $defaults = array('gameid', 'item', 'selector', 'coming', '_token');
         $detailkeys = array();
 
         $detail = [];

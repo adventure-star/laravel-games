@@ -18,12 +18,12 @@
                 <div class="submit-form">
                     <form id="submit-form" action="{{route('teams.update')}}" method="post">
                         @csrf
-                        <h4>Edit Team</h4>
+                        <h4>{{__('admin.edit_team')}}</h4>
                         <input class="hidden" name="id" value={{$id}} />
                         <div class="row">
                             <div class="col-md-6 col-md-offset-3 col-xs-12">
                                 <div class="w-100 maxwidth-200 mx-auto">
-                                    <p class="player-label">Long Name</p>
+                                    <p class="player-label">{{__('common.name')}}</p>
                                     <input type="text" name="longname" @if(isset($team)) value="{{$team["longname"]}}"@endif />
                                 </div>
                             </div>
@@ -31,7 +31,7 @@
                         <div class="row">
                             <div class="col-md-6 col-md-offset-3 col-xs-12">
                                 <div class="w-100 maxwidth-200 mx-auto">
-                                    <p class="player-label">Short Name</p>
+                                    <p class="player-label">{{__('common.short')}}</p>
                                     <input type="text" name="shortname" @if(isset($team)) value="{{$team["shortname"]}}"@endif />
                                 </div>
                             </div>

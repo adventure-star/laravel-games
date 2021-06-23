@@ -18,12 +18,12 @@
 
                 <div class="row">
                     <div class="mt-0 mb-20">
-                        <h4>Select Game</h4>
+                        <h4>{{__('common.select_game')}}</h4>
                         <select class="normal-component maxwidth-200" onchange="getResultsByGameId(this)">
                             <option value="all">Total</option>
                             @if(isset($games) && count($games) > 0)
                                 @foreach($games as $key => $item)
-                                    <option value={{$item['id']}} @if(isset($game) && $game == $item['id']) selected @endif>{{$item['name']}} ({{$item['state'] == 0 ? "Not Opened" : ($item['state'] == 1 ? "Active" : "Expired")}})</option>
+                                    <option value={{$item['id']}} @if(isset($game) && $game == $item['id']) selected @endif>{{$item['name']}} ({{$item['state'] == 0 ? __('common.not_opened') : ($item['state'] == 1 ? __('common.active') : __('common.expired'))}})</option>
                                 @endforeach
                             @endif
                         </select>
@@ -32,7 +32,7 @@
 
                 <div class="row">
                     <div class="mt-0 mb-20">
-                        <h4>Select Round</h4>
+                        <h4>{{__('common.select_round')}}</h4>
                         <select class="normal-component maxwidth-200" onchange="getResultsByRoundId(this)">
                             <option value="all">Total</option>
                             @if(isset($rounds) && count($rounds) > 0)
@@ -49,13 +49,13 @@
                     <table class="table">
                         <tr>
                             <th>ID</th>
-                            <th>Team</th>
-                            <th>Name</th>
-                            <th>No</th>
-                            <th>Edit</th>
-                            <th>Point</th>
-                            <th>New/Edit</th>
-                            <th>Remove</th>
+                            <th>{{__('common.team')}}</th>
+                            <th>{{__('common.name')}}</th>
+                            <th>{{__('common.no_number')}}</th>
+                            <th>{{__('common.edit')}}</th>
+                            <th>{{__('common.point')}}</th>
+                            <th>{{__('common.new')}}/{{__('common.edit')}}</th>
+                            <th>{{__('common.remove')}}</th>
                         </tr>
                         @if(isset($players) && count($players) > 0)
                             @foreach($players as $key => $item)
@@ -80,18 +80,18 @@
                                         <div class="modal-dialog vertical-align-center">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">{{__('common.close')}}</span>
                                 
                                                     </button>
                                                      <h4 class="modal-title" id="myModalLabel">Sofa League</h4>
                                 
                                                 </div>
                                                 <div class="modal-body">
-                                                    <p class="font-24">Do you want to remove this player?</p>
+                                                    <p class="font-24">{{__('common.remove_player_warning')}}</p>
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-primary float-left" data-dismiss="modal">No</button>
-                                                    <button type="button" class="btn btn-danger" onclick="deletePlayer({{$item['id']}})">Yes</button>
+                                                    <button type="button" class="btn btn-primary float-left" data-dismiss="modal">{{__('common.no')}}</button>
+                                                    <button type="button" class="btn btn-danger" onclick="deletePlayer({{$item['id']}})">{{__('common.yes')}}</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -104,12 +104,12 @@
                 <div class="row">
                     <div class="col-sm-6 col-xs-12">
                         <p class="text-left-center py-4">
-                            <a href="{{route('points')}}" class="underline text-primary text-xl-right">Import Points</a>
+                            <a href="{{route('points')}}" class="underline text-primary text-xl-right">{{__('admin.import_points')}}</a>
                         </p>
                     </div>
                     <div class="col-sm-6 col-xs-12">
                         <p class="text-right-center py-4">
-                            <a href="{{route('players.new')}}" class="underline text-primary text-xl-right">Add New Player</a>
+                            <a href="{{route('players.new')}}" class="underline text-primary text-xl-right">{{__('admin.add_new_player_to_round')}}</a>
                         </p>
                     </div>
                 </div>

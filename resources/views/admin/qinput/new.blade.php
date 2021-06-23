@@ -18,18 +18,18 @@
                 <div class="submit-form">
                     <form id="submit-form" action="{{route('qinputs.new.save')}}" method="post">
                         @csrf
-                        <h4>New Answer</h4>
+                        <h4>{{__('admin.new_answer')}}</h4>
                         <input class="hidden" name="questionid" value={{$id}} />
                         <div class="row">
                             <div class="col-md-6 col-xs-12">
                                 <div class="w-100 maxwidth-200 mx-auto">
-                                    <p class="player-label">Content</p>
+                                    <p class="player-label">{{__('common.content')}}</p>
                                     <input type="text" name="input" value="{{old('input')}}" required />
                                 </div>
                             </div>
                             <div class="col-md-6 col-xs-12">
                                 <div class="w-100 maxwidth-200 mx-auto">
-                                    <p class="player-label">Point</p>
+                                    <p class="player-label">{{__('common.point')}}</p>
                                     <input type="number" name="point" value="{{old('point')}}" required />
                                 </div>
                             </div>

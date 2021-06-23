@@ -17,9 +17,9 @@
             <div class="col-md-10 col-md-offset-1 col-xs-12 text-center">
                 <div class="row">
                     <div class="mt-0 mb-20">
-                        <h4>Select Game</h4>
+                        <h4>{{__('common.select_game')}}</h4>
                         <select class="normal-component maxwidth-200" onchange="getResultsByGameId(this)">
-                            <option disabled selected>Select Game</option>
+                            <option disabled selected>{{__('common.select_game')}}</option>
                             @if(isset($games) && count($games) > 0)
                                 @foreach($games as $key => $item)
                                     <option value={{$item['id']}} @if(isset($game) && $game == $item['id']) selected @endif>{{$item['name']}}</option>
@@ -32,11 +32,11 @@
                 <div class="table-responsive fixtures-table">
                     <table class="table">
                         <tr>
-                            <th>Round</th>
-                            <th>Number</th>
-                            <th>Text</th>
-                            <th>Answers</th>
-                            <th>Edit</th>
+                            <th>{{__('common.round')}}</th>
+                            <th>{{__('common.number')}}</th>
+                            <th>{{__('common.text')}}</th>
+                            <th>{{__('common.answers')}}</th>
+                            <th>{{__('common.edit')}}</th>
                         </tr>
                         @if(isset($questions) && count($questions) > 0)
                             @foreach($questions as $key => $item)
@@ -63,7 +63,7 @@
                             @foreach($roundwithoutquestions as $key => $item)
                                 <tr>
                                     <td>{{App\Model\Round::find($item)->roundno}}</td>
-                                    <td colspan="3">No Questions</td>
+                                    <td colspan="3">{{__('admin.no_questions')}}</td>
                                     <td>
                                         <a href="{{route('questions.round.edit', $item)}}" class="btn btn-success-rgba"><i class="fa fa-edit"></i></a>
                                     </td>

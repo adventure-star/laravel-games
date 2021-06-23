@@ -18,12 +18,12 @@
                 <div class="submit-form">
                     <form id="submit-form" action="{{route('rounds.new.save')}}" method="post">
                         @csrf
-                        <h4>New Round</h4>
+                        <h4>{{__('admin.new_round')}}</h4>
                         <input class="hidden" name="gameid" value={{$gameid}} />
                         <div class="row">
                             <div class="col-md-6 col-md-offset-3 col-xs-12">
                                 <div class="w-100 maxwidth-200 mx-auto">
-                                    <p class="player-label">RoundNo</p>
+                                    <p class="player-label">{{__('admin.roundno')}}</p>
                                     <input type="text" name="roundno" value="{{old('roundno')}}" required/>
                                 </div>
                             </div>
@@ -31,12 +31,12 @@
                         <div class="row">
                             <div class="col-md-6 col-md-offset-3 col-xs-12">
                                 <div class="w-100 maxwidth-200 mx-auto">
-                                    <p class="player-label">State</p>
+                                    <p class="player-label">{{__('common.state')}}</p>
                                     <select name="state" required>
-                                        <option value="0" disabled selected>Select Status</option>
-                                        <option value="0" @if(old('state') == 0) selected @endif>Not Opened</option>
-                                        <option value="1" @if(old('state') == 1) selected @endif>Active</option>
-                                        <option value="2" @if(old('state') == 2) selected @endif>Expired</option>
+                                        <option value="0" disabled selected>">{{__('common.select_state')}}</option>
+                                        <option value="0" @if(old('state') == 0) selected @endif>{{__('common.not_opened')}}</option>
+                                        <option value="1" @if(old('state') == 1) selected @endif>{{__('common.active')}}</option>
+                                        <option value="2" @if(old('state') == 2) selected @endif>{{__('common.expired')}}</option>
                                     </select>
                                 </div>
                             </div>

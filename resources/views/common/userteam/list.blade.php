@@ -15,19 +15,23 @@
         <div class="row">
             <div class="col-md-12 col-xs-12 text-center">
 
-                <div class="row">
-                    <div class="mt-0 mb-20">
-                        <h4>Select Game</h4>
-                        <select class="normal-component maxwidth-200" onchange="getResultsByGameId(this)">
-                            <option disabled selected>Select Game</option>
-                            @if(isset($games) && count($games) > 0)
-                                @foreach($games as $key => $item)
-                                    <option value={{$item['gameid']}} @if(isset($game) && $game == $item['gameid']) selected @endif>{{App\Model\Game::find($item['gameid'])->name}}</option>
-                                @endforeach
-                            @endif
-                        </select>
+                @if(Auth::user()->isadmin == 1)
+
+                    <div class="row">
+                        <div class="mt-0 mb-20">
+                            <h4>{{__('common.select_game')}}</h4>
+                            <select class="normal-component maxwidth-200" onchange="getResultsByGameId(this)">
+                                <option disabled selected>{{__('common.select_game')}}</option>
+                                @if(isset($games) && count($games) > 0)
+                                    @foreach($games as $key => $item)
+                                        <option value={{$item['gameid']}} @if(isset($game) && $game == $item['gameid']) selected @endif>{{App\Model\Game::find($item['gameid'])->name}}</option>
+                                    @endforeach
+                                @endif
+                            </select>
+                        </div>
                     </div>
-                </div>
+
+                @endif
 
                 @if($game)
 
@@ -35,9 +39,9 @@
 
                         <div class="row">
                             <div class="mt-0 mb-20">
-                                <h4>Select Round</h4>
+                                <h4>{{__('common.select_round')}}</h4>
                                 <select class="normal-component maxwidth-200" onchange="getResultsByRoundId(this)">
-                                    <option value="all">Total</option>
+                                    <option value="all">{{__('common.total')}}</option>
                                     @if(isset($rounds) && count($rounds) > 0)
                                         @foreach($rounds as $key => $item)
                                             <option value={{$item['id']}} @if(isset($round) && $round == $item['id']) selected @endif>{{$item['roundno']}}</option>
@@ -53,11 +57,11 @@
                     <div class="table-responsive fixtures-table">
                         <table class="table">
                             <tr>
-                                <th>Team</th>
-                                <th>Round</th>
-                                <th>Detail</th>
+                                <th>{{__('common.team')}}</th>
+                                <th>{{__('common.round')}}</th>
+                                <th>{{__('common.detail')}}</th>
                                 @if(Auth::user()->isadmin == 1)
-                                    <th>Remove</th>
+                                    <th>{{__('common.remove')}}</th>
                                 @endif
                             </tr>
                             @if(isset($teams) && count($teams) > 0)
@@ -97,11 +101,11 @@
                                         
                                                         </div>
                                                         <div class="modal-body">
-                                                            <p class="font-24">Do you want to remove this userteam?</p>
+                                                            <p class="font-24">{{__('common.remove_userteam_warning')}}</p>
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-primary float-left" data-dismiss="modal">No</button>
-                                                            <button type="button" class="btn btn-danger" onclick="deleteUserTeam({{$item['id']}})">Yes</button>
+                                                            <button type="button" class="btn btn-primary float-left" data-dismiss="modal">{{__('common.no')}}</button>
+                                                            <button type="button" class="btn btn-danger" onclick="deleteUserTeam({{$item['id']}})">{{__('common.yes')}}</button>
                                                         </div>
                                                     </div>
                                                 </div>

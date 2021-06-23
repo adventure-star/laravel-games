@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
 
 /*
 |--------------------------------------------------------------------------
@@ -152,3 +153,9 @@ Route::post('/roundplayers/upload', 'AdminController@uploadroundplayer')->name('
 Route::post('/abbs/upload', 'AdminController@uploadabbs')->name('uploads.abbs');
 Route::get('/roundplayers/new', 'AdminController@roundplayernew')->name('roundplayer.new');
 Route::post('/roundplayers', 'AdminController@uploadroundplayer')->name('roundplayer.add');
+
+
+Route::get('setlocale/{locale}',function($lang){
+    Session::put('locale',$lang);
+    return redirect()->back();
+})->name('lang');

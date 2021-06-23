@@ -19,20 +19,20 @@
                 <div class="table-responsive fixtures-table">
                     <table class="table">
                         <tr>
-                            <th>FullName</th>
-                            <th>UserName</th>
-                            <th>Email</th>
-                            <th>Marketing</th>
-                            <th>Paid</th>
-                            <th>Remove</th>
+                            <th>{{__('common.fullname')}}</th>
+                            <th>{{__('common.username')}}</th>
+                            <th>{{__('common.email')}}</th>
+                            <th>{{__('admin.marketing')}}</th>
+                            <th>{{__('admin.paid')}}</th>
+                            <th>{{__('common.remove')}}</th>
                         </tr>
                         @if(isset($users) && count($users) > 0)
                             @foreach($users as $key => $item)
                                 <tr>
                                     <td>{{$item["fullname"]}}</td>
-                                    <td>{{$item["username"]}}</td>
+                                    <td>{{$item["displayname"]}}</td>
                                     <td>{{$item["email"]}}</td>
-                                    <td>{{$item["ismarketing"] == 1 ? "Yes" : "No"}}</td>
+                                    <td>{{$item["ismarketing"] == 1 ? __('common.yes') : __('common.no') }}</td>
                                     <td>
                                         <input type="checkbox" class="cursor-pointer" @if($item["ispaid"] == 1) checked @endif onchange="changepaidstate({{$item['id']}})" />
                                     </td>
@@ -45,18 +45,18 @@
                                         <div class="modal-dialog vertical-align-center">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">{{__('common.close')}}</span>
                                 
                                                     </button>
                                                     <h4 class="modal-title" id="myModalLabel">Sofa League</h4>
                                 
                                                 </div>
                                                 <div class="modal-body">
-                                                    <p class="font-24">Do you want to remove this user?</p>
+                                                    <p class="font-24">{{__('admin.remove_user_warning')}}</p>
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-primary float-left" data-dismiss="modal">No</button>
-                                                    <button type="button" class="btn btn-danger" onclick="deleteUser({{$item['id']}})">Yes</button>
+                                                    <button type="button" class="btn btn-primary float-left" data-dismiss="modal">{{__('common.no')}}</button>
+                                                    <button type="button" class="btn btn-danger" onclick="deleteUser({{$item['id']}})">{{__('common.yes')}}</button>
                                                 </div>
                                             </div>
                                         </div>

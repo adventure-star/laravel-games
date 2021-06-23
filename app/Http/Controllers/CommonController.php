@@ -23,6 +23,7 @@ use PDO;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Mail\Mailer;
 use Illuminate\Mail\Message;
+use Illuminate\Support\Facades\Session;
 
 class CommonController extends Controller
 {
@@ -35,6 +36,8 @@ class CommonController extends Controller
     public function __construct(Mailer $mailer)
     {
         $this->mailer = $mailer;
+        $this->middleware('language');
+
     }
 
     public function sendEmail(Request $request)
@@ -105,6 +108,10 @@ class CommonController extends Controller
 
         $game = Game::find($id);
 
+        $selector = json_decode($game->other)->selector;
+
+        Session::put('game', $id);
+
         if(!!!$game->other) {
             if(Auth::user()) {
                 return redirect()->route('games.joined');
@@ -131,7 +138,7 @@ class CommonController extends Controller
 
 
         if(!Auth::User()) {
-            return view('guest.submit', compact('rounds', 'id', 'category', 'details', 'round', 'players', 'questions', 'teams'));
+            return view('guest.submit', compact('rounds', 'id', 'category', 'details', 'round', 'players', 'questions', 'teams', 'selector'));
         }
 
         $olddata = Team::where(['userid' => Auth::user()->id, 'gameid' => $id, 'roundid' => $round])->first();
@@ -139,9 +146,9 @@ class CommonController extends Controller
 
         if($olddata) {
             $olddetail = get_object_vars(json_decode($olddata->detail));
-            return view('guest.submit', compact('rounds', 'id', 'category', 'details', 'round', 'players', 'questions', 'olddetail', 'teams'));
+            return view('guest.submit', compact('rounds', 'id', 'category', 'details', 'round', 'players', 'questions', 'olddetail', 'teams', 'selector'));
         } else {
-            return view('guest.submit', compact('rounds', 'id', 'category', 'details', 'round', 'players', 'questions', 'teams'));
+            return view('guest.submit', compact('rounds', 'id', 'category', 'details', 'round', 'players', 'questions', 'teams', 'selector'));
         }
 
     }
@@ -240,6 +247,10 @@ class CommonController extends Controller
         $game = $request->query('game');
         $round = $request->query('round');
 
+        if(!Auth::user() || Auth::user()->isadmin != 1) {
+            $game = session('game');
+        }
+
         $games = Game::where('state', 2)->get();
 
         if($game) {
@@ -280,6 +291,10 @@ class CommonController extends Controller
 
         $game = $request->query('game');
         $round = $request->query('round');
+
+        if(Auth::user()->isadmin != 1) {
+            $game = session('game');
+        }
 
         $games = Game::where('state', 2)->get();
 
@@ -328,6 +343,10 @@ class CommonController extends Controller
         $game = $request->query('game');
         $round = $request->query('round');
 
+        if(Auth::user()->isadmin != 1) {
+            $game = session('game');
+        }
+
         if(Auth::user()->isadmin == 1) {
             $games = Team::select('gameid')->distinct()->orderBy('roundid', 'asc')->get();
             $teams = Team::where(['gameid' => $game])->orderBy('roundid', 'asc')->get();
@@ -362,25 +381,8 @@ class CommonController extends Controller
 
         $team = Team::find($id);
 
-        $g = Point::where('playerid', '=', $team['g'])->first();
-        $d1 = Point::where('playerid', '=', $team['d1'])->first();
-        $d2 = Point::where('playerid', '=', $team['d2'])->first();
-        $m1 = Point::where('playerid', '=', $team['m1'])->first();
-        $m2 = Point::where('playerid', '=', $team['m2'])->first();
-        $f1 = Point::where('playerid', '=', $team['f1'])->first();
-        $f2 = Point::where('playerid', '=', $team['f2'])->first();
-
-        $answers = Answer::where(['jid' => $team['jid'], 'round' => $team['round']])->get();
-
-        $detail = [
-            'g' => $g,
-            'd1' => $d1,
-            'd2' => $d2,
-            'm1' => $m1,
-            'm2' => $m2,
-            'f1' => $f1,
-            'f2' => $f2,
-        ];
+        $detail = json_decode($team->detail);
+        $answers = Answer::where(['userid' => $team['userid'], 'roundid' => $team['roundid']])->get();
 
         return view('common.userteam.pointdetail', compact('detail', 'answers'));
 
@@ -408,7 +410,7 @@ class CommonController extends Controller
 
     }
     public function gamecalendar() {
-        $games = Game::where(['active' => 1])->get();
+        $games = Game::where(['active' => 1, 'state' => 1])->get();
         return view('guest.game.calendar', compact('games'));
     }
     public function endedgames() {

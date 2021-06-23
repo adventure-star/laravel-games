@@ -21,8 +21,8 @@
                 <div class="table-responsive fixtures-table">
                     <table class="table">
                         <tr>
-                            <th>Team</th>
-                            <th>Total Points</th>
+                            <th>{{__('common.team')}}</th>
+                            <th>{{__('common.total_points')}}</th>
                         </tr>
                         @if(isset($teams) && count($teams) > 0)
                             @foreach($teams as $key => $item)
@@ -40,38 +40,5 @@
     </div>
 </div>
 <!-- Fixtures Area End -->
-
-@endsection
-
-@section('scripts')
-    <script>
-        function calculate(id) {
-
-            $.ajax({
-                method: "post",
-                url: "{{route('points.calculate')}}",
-                headers: {
-                    'X-CSRF-TOKEN': '<?= csrf_token() ?>'
-                },
-
-                data : JSON.stringify({id : 1}),
-                datatype: 'JSON',
-                contentType: 'application/json',
-
-                async: true,
-                success: function (data) {
-                    if(data) {
-                        window.location = "{{route('standing')}}";
-                    }
-                },
-                error: function () {
-                    console.log("error");
-                }
-            });
-        }
-        function getResultsByRoundId(e) {
-            window.location.href = "{{route('standing')}}?round=" + e.value;
-        }
-    </script>
 
 @endsection

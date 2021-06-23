@@ -16,36 +16,36 @@
             <!-- Contact Form -->
             <div class="col-sm-8 col-sm-offset-2 col-xs-12 mb-30">
                 <div class="contact-form">
-                    <h4>Create New Account!</h4>
+                    <h4>{{__('auth.create_account')}}!</h4>
                     <form id="contact-form" action="{{route('register')}}" method="post">
                         @csrf
-                        <input type="text" class="@error('fullname') is-invalid @enderror" name="fullname" placeholder="FullName" value="{{ old('fullname') }}" required autocomplete="fullname" autofocus>
+                        <input type="text" class="@error('fullname') is-invalid @enderror" name="fullname" placeholder="{{__('common.fullname')}}" value="{{ old('fullname') }}" required autocomplete="fullname" autofocus>
                         @error('fullname')
                             <p class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </p>
                         @enderror
-                        <input id="email" type="email" class="@error('email') is-invalid @enderror" name="email" placeholder="Email" value="{{ old('email') }}" required autocomplete="email">
+                        <input id="email" type="email" class="@error('email') is-invalid @enderror" name="email" placeholder="{{__('common.email')}}" value="{{ old('email') }}" required autocomplete="email">
 
                         @error('email')
                             <p class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </p>
                         @enderror
-                        {{-- <input type="text" class="@error('teamname') is-invalid @enderror" name="teamname" placeholder="TeamName" value="{{ old('teamname') }}" required autocomplete="teamname" autofocus>
-                        @error('teamname')
+                        <input type="text" class="@error('displayname') is-invalid @enderror" name="displayname" placeholder="UserName" value="{{ old('displayname') }}" required autocomplete="teamname" autofocus>
+                        @error('displayname')
                             <p class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </p>
-                        @enderror --}}
-                        <input type="text" class="@error('username') is-invalid @enderror" name="username" placeholder="LoginName" value="{{ old('username') }}" required autocomplete="username" autofocus>
+                        @enderror
+                        <input type="text" class="@error('username') is-invalid @enderror" name="username" placeholder="{{__('common.loginname')}}" value="{{ old('username') }}" required autocomplete="username" autofocus>
                         @error('username')
                             <p class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </p>
                         @enderror
                         <div class="input-group">
-                            <input id="password" name="password" type="password" class="form-control-password @error('password') is-invalid @enderror" placeholder="LoginPassword" required autocomplete="new-password"/>
+                            <input id="password" name="password" type="password" class="form-control-password @error('password') is-invalid @enderror" placeholder="{{__('common.password')}}" required autocomplete="new-password"/>
                             <div class="form-control-after cursor-pointer">
                                 <svg id="eye_fill" xmlns="http://www.w3.org/2000/svg" width="25.515" height="16" viewBox="0 0 25.515 16">
                                     <path d="M12.762,27.286c7.539,0,12.753-6.1,12.753-8s-5.224-8-12.753-8C5.28,11.286,0,17.376,0,19.286S5.318,27.286,12.762,27.286Zm0-2.758a5.274,5.274,0,0,1-5.271-5.242,5.266,5.266,0,0,1,10.532,0A5.266,5.266,0,0,1,12.762,24.529Zm0-3.351a1.9,1.9,0,1,0-1.92-1.892A1.914,1.914,0,0,0,12.762,21.178Z" transform="translate(0 -11.286)" fill="#3b3b3a" opacity="0.596"/>
@@ -61,7 +61,7 @@
                             </p>
                         @enderror
                         <div class="px-10">
-                            <label class="checkbox-container">I want to receive email regarding this game and coming games.
+                            <label class="checkbox-container">{{__('auth.email_regarding')}}
                                 <input type="checkbox" name="ismarketing" value="1">
                                 <span class="checkbox-checkmark"></span>
                             </label>
@@ -70,7 +70,7 @@
                         <div class="row">
                             <input type="submit" value="Register" />
                         </div>
-                        <p class="py-4">If you have an account, please <a href="{{route('login')}}" class="color-red">Log In</a></p>
+                        <p class="py-4">{{__('auth.login_notify')}} <a href="{{route('login')}}" class="color-red">{{__('auth.login')}}</a></p>
                     </form>
                 </div>
             </div>

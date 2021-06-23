@@ -16,21 +16,21 @@
             
             <div class="col-md-10 col-md-offset-1 col-xs-12 text-center">
                 <!-- Fixtures Table -->
-                <p>Game: <strong>{{App\Model\Game::find($gameid)->name}}</strong></p>
+                <p>{{__('common.game')}}: <strong>{{App\Model\Game::find($gameid)->name}}</strong></p>
                 <br />
                 <div class="table-responsive fixtures-table">
                     <table class="table">
                         <tr>
-                            <th>RoundNo</th>
-                            <th>State</th>
-                            <th>Edit</th>
-                            <th>Remove</th>
+                            <th>{{__('admin.roundno')}}</th>
+                            <th>{{__('common.state')}}</th>
+                            <th>{{__('common.edit')}}</th>
+                            <th>{{__('common.remove')}}</th>
                         </tr>
                         @if(isset($rounds) && count($rounds) > 0)
                             @foreach($rounds as $key => $item)
                                 <tr>
                                     <td>{{$item["roundno"]}}</td>
-                                    <td>{{$item["state"] == 0 ? "Not Opened" : ($item["state"] == 1 ? "Active" : "Expired")}}</td>
+                                    <td>{{$item["state"] == 0 ? __('common.not_opened') : ($item["state"] == 1 ? __('common.active') : __('common.expired'))}}</td>
                                     <td>
                                         <a href="{{route('rounds.edit', $item['id'])}}" class="btn btn-success-rgba"><i class="fa fa-edit"></i></a>
                                     </td>
@@ -50,11 +50,11 @@
                                 
                                                 </div>
                                                 <div class="modal-body">
-                                                    <p class="font-24">Do you want to remove this round?</p>
+                                                    <p class="font-24">{{__('admin.remove_round_warning')}}</p>
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-primary float-left" data-dismiss="modal">No</button>
-                                                    <button type="button" class="btn btn-danger" onclick="deleteRound({{$item['id']}})">Yes</button>
+                                                    <button type="button" class="btn btn-primary float-left" data-dismiss="modal">{{__('common.no')}}</button>
+                                                    <button type="button" class="btn btn-danger" onclick="deleteRound({{$item['id']}})">{{__('common.yes')}}</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -67,12 +67,12 @@
                 <div class="row">
                     <div class="col-sm-6 col-xs-12">
                         <p class="text-left-center py-4">
-                            <a href="{{route('games')}}" class="underline text-primary text-xl-right">Go To Games List</a>
+                            <a href="{{route('games')}}" class="underline text-primary text-xl-right">{{__('admin.go_to_game_list')}}</a>
                         </p>
                     </div>
                     <div class="col-sm-6 col-xs-12">
                         <p class="text-right-center py-4">
-                            <a href="{{route('rounds.new', $gameid)}}" class="underline text-primary text-xl-right">Add New Round To This Game</a>
+                            <a href="{{route('rounds.new', $gameid)}}" class="underline text-primary text-xl-right">{{__('admin.add_round_to_game')}}</a>
                         </p>
                     </div>
                 </div>

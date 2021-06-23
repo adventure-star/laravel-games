@@ -13,9 +13,9 @@
 <div id="contact-area" class="contact-area section pb-90 pt-120">
     <div class="container-fluid">
         <div class="row text-center">
-            <h3>Game: {{App\Model\Game::find($id)->name}}</h3>
+            <h3>{{__('common.game')}}: {{App\Model\Game::find($id)->name}}</h3>
             @if(Auth::user())
-                <h4>Your Team: {{App\Model\GameUser::where(['userid' => Auth::user()->id, 'gameid' => $id])->first()->teamname}}</h4>
+                <h4>{{__('common.your_team')}}: {{App\Model\GameUser::where(['userid' => Auth::user()->id, 'gameid' => $id])->first()->teamname}}</h4>
             @endif
             <div class="col-md-7 col-sm-12">
                 <div class="row">
@@ -26,10 +26,10 @@
                                 @csrf
                                 <input type="text" class="hidden" name="gameid" value="{{$id}}" />
                                 <div class="row">
-                                    <h4>Round</h4>
+                                    <h4>{{__('common.select_team_for_round')}}</h4>
                                     <div class="w-100 maxwidth-400 mx-auto px-14">
                                         <select name="roundid" onchange="getResultsByRoundId(this)" required>
-                                            <option disabled selected>Select Round</option>
+                                            <option disabled selected>{{__('common.select_round')}}</option>
                                             @if(isset($rounds) && count($rounds) > 0)
                                                 @foreach($rounds as $item)
                                                     <option value={{$item['id']}} @if(isset($round) && $round == $item['id']) selected @endif >{{$item['roundno']}}</option>
@@ -39,7 +39,7 @@
                                     </div>
                                 </div>
                                 @if($round)
-                                    <h4>Team</h4>
+                                    <h4>{{__('common.team')}}</h4>
                                     @if(isset($details))
                                         @foreach($details as $key => $detail)
                                             @for($i = 0 ; $i < number_format($detail) ; $i ++)
@@ -48,7 +48,7 @@
                                                         <div class="w-100 maxwidth-200 mx-auto">
                                                             <p class="player-label">{{ucfirst($category)}} : {{$key}}</p>
                                                             <select name="{{$key}}{{$i + 1}}" required>
-                                                                <option disabled selected>Select Player</option>
+                                                                <option disabled selected>Select {{$selector}}</option>
                                                                 @if(isset($players) && count($players) > 0)
                                                                     @foreach($players as $key1 => $player)
                                                                         @if($player->$category == $key)
@@ -63,7 +63,7 @@
                                             @endfor
                                         @endforeach
                                     @endif
-                                    <h4>Question</h4>
+                                    <h4>{{__('common.question')}}</h4>
                                     <div id="questionarea">
                                         @if(isset($questions) && count($questions) > 0)
                                             @foreach($questions as $key => $question)
@@ -76,7 +76,7 @@
                                                     <div class='col-sm-6 col-xs-12'>
                                                         <div class='w-100 maxwidth-250 mx-auto'>
                                                             <select name='question_{{$question['id']}}'>
-                                                                <option disabled selected>Select Answer</option>
+                                                                <option disabled selected>{{__('common.select_answer')}}</option>
                                                                 @if(isset($question->qinputs))
                                                                     @foreach($question->qinputs as $key=>$qinput)
                                                                         <option value="{{$qinput['id']}}" @if(Auth::user()) @if(App\Model\Answer::where(['userid' => Auth::user()->id, 'gameid' => $id, 'roundid' => $round, 'questionid' => $question['id'], 'qinputid' => $qinput['id']])->first()) selected @endif @endif>{{$qinput['input']}}</option>
@@ -92,7 +92,7 @@
                                     @if(Auth::user())
                                         <input type="submit" value="Submit">
                                     @else
-                                        <h5>You have to Login to submit team</h5>
+                                        <h5>{{__('common.login_to_submit')}}</h5>
                                     @endif
                                 @endif
                             </form>
@@ -105,12 +105,12 @@
                     
                     <div class="col-md-10 col-md-offset-1 col-xs-12 text-center">
                         <!-- Fixtures Table -->
-                        <h4>Teams</h4>
+                        <h4>{{__('common.teams')}}</h4>
                         <div class="table-responsive fixtures-table maxwidth-700 mx-auto mt-25">
                             <table id="fixturetable" class="table">
                                 <tr>
-                                    <th>LongName</th>
-                                    <th>ShortName</th>
+                                    <th>{{__('common.name')}}</th>
+                                    <th>{{__('common.short')}}</th>
                                 </tr>
                                 @if(isset($teams) && count($teams) > 0)
                                     @foreach($teams as $key => $item)

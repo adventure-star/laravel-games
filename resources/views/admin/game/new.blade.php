@@ -18,11 +18,11 @@
                 <div class="submit-form">
                     <form id="submit-form" action="{{route('games.new.save')}}" method="post">
                         @csrf
-                        <h4>New Game</h4>
+                        <h4>{{__('admin.new_game')}}</h4>
                         <div class="row">
                             <div class="col-md-6 col-md-offset-3 col-xs-12">
                                 <div class="w-100 maxwidth-200 mx-auto">
-                                    <p class="player-label">Name</p>
+                                    <p class="player-label">{{__('common.name')}}</p>
                                     <input type="text" name="name" value="{{old('name')}}" required/>
                                 </div>
                             </div>
@@ -30,12 +30,12 @@
                         <div class="row">
                             <div class="col-md-6 col-md-offset-3 col-xs-12">
                                 <div class="w-100 maxwidth-200 mx-auto">
-                                    <p class="player-label">State</p>
+                                    <p class="player-label">{{__('common.state')}}</p>
                                     <select name="state" required>
-                                        <option disabled selected>Select State</option>
-                                        <option value="0" @if(old('state') == 0) selected @endif>Not Opened</option>
-                                        <option value="1" @if(old('state') == 1) selected @endif>Active</option>
-                                        <option value="2" @if(old('state') == 2) selected @endif>Expired</option>
+                                        <option disabled selected>{{__('common.select_state')}}</option>
+                                        <option value="0" @if(old('state') == 0) selected @endif>{{__('common.not_opened')}}</option>
+                                        <option value="1" @if(old('state') == 1) selected @endif>{{__('common.active')}}</option>
+                                        <option value="2" @if(old('state') == 2) selected @endif>{{__('common.expired')}}</option>
                                     </select>
                                 </div>
                             </div>
@@ -43,7 +43,7 @@
                         <div class="row">
                             <div class="col-md-6 col-md-offset-3 col-xs-12">
                                 <div class="w-100 maxwidth-200 mx-auto">
-                                    <p class="player-label">Deadline</p>
+                                    <p class="player-label">{{__('common.deadline')}}</p>
                                     <input type="text" name="deadline" value="{{old('deadline')}}" required/>
                                 </div>
                             </div>

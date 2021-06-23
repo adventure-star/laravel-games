@@ -15,14 +15,14 @@
         <div class="row text-center">
             <!-- Contact Form -->
             <div class="col-sm-10 col-sm-offset-1 col-xs-12 mb-30">
-                <p class="question-title pb-10">Round: @if(isset($id)) {{App\Model\Round::find($id)['roundno']}} @endif</p>
+                <p class="question-title pb-10">{{__('common.round')}}: @if(isset($id)) {{App\Model\Round::find($id)['roundno']}} @endif</p>
                 <div class="table-responsive fixtures-table">
                     <table class="table">
                         <tr>
-                            <th>Number</th>
-                            <th>Content</th>
-                            <th>Edit</th>
-                            <th>Remove</th>
+                            <th>{{__('common.number')}}</th>
+                            <th>{{__('common.content')}}</th>
+                            <th>{{__('common.edit')}}</th>
+                            <th>{{__('common.remove')}}</th>
                         </tr>
                         <input id="roundid" class="hidden" name="id" value={{$id}} />
                         @if(isset($questions) && count($questions) > 0)
@@ -42,18 +42,18 @@
                                         <div class="modal-dialog vertical-align-center">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">{{__('common.close')}}</span>
                                 
                                                     </button>
                                                      <h4 class="modal-title" id="myModalLabel">Sofa League</h4>
                                 
                                                 </div>
                                                 <div class="modal-body">
-                                                    <p class="font-24">Do you want to remove this question?</p>
+                                                    <p class="font-24">{{__('admin.remove_question_warning')}}</p>
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-primary float-left" data-dismiss="modal">No</button>
-                                                    <button type="button" class="btn btn-danger" onclick="deleteQuestion({{$item['id']}})">Yes</button>
+                                                    <button type="button" class="btn btn-primary float-left" data-dismiss="modal">{{__('common.no')}}</button>
+                                                    <button type="button" class="btn btn-danger" onclick="deleteQuestion({{$item['id']}})">{{__('common.yes')}}</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -66,12 +66,12 @@
                 <div class="row">
                     <div class="col-sm-6 col-xs-12">
                         <p class="text-left-center py-4">
-                            <a href="{{route('questions', ['game' => App\Model\Round::find($id)->gameid ])}}" class="underline text-primary text-xl-right">All Questions</a>
+                            <a href="{{route('questions', ['game' => App\Model\Round::find($id)->gameid ])}}" class="underline text-primary text-xl-right">{{__('admin.all_questions')}}</a>
                         </p>
                     </div>
                     <div class="col-sm-6 col-xs-12">
                         <p class="text-right-center py-4">
-                            <a href="{{route('questions.new', $id)}}" class="underline text-primary text-xl-right">Add New Question to This Round</a>
+                            <a href="{{route('questions.new', $id)}}" class="underline text-primary text-xl-right">{{__('admin.add_question_to_round')}}</a>
                         </p>
                     </div>
                 </div>

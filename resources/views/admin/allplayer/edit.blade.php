@@ -18,7 +18,7 @@
                 <div class="submit-form">
                     <form id="submit-form" action="{{route('games.players.update')}}" method="post">
                         @csrf
-                        <h4>Edit Player</h4>
+                        <h4>{{__('admin.edit_player')}}</h4>
                         <input class="hidden" name="id" value={{$id}} />
                         <div class="row">
                             <div class="col-md-12 col-xs-12">
@@ -31,18 +31,18 @@
                         <div class="row">
                             <div class="col-md-6 col-xs-12">
                                 <div class="w-100 maxwidth-200 mx-auto">
-                                    <p class="player-label">Team</p>
+                                    <p class="player-label">{{__('common.team')}}</p>
                                     <input type="text" name="team" @if(isset($player)) value="{{$player["team"]}}"@endif />
                                 </div>
                             </div>
                             <div class="col-md-6 col-xs-12">
                                 <div class="w-100 maxwidth-200 mx-auto">
-                                    <p class="player-label">Name</p>
+                                    <p class="player-label">{{__('common.name')}}</p>
                                     <input type="text" name="name" @if(isset($player)) value="{{$player["name"]}}"@endif />
                                 </div>
                             </div>
                         </div>
-                        <h5 class="mt-20">Additional Inputs</h5>
+                        <h5 class="mt-20">{{__('common.additional_inputs')}}</h5>
                         <hr />
                         <div id="newinputs" class="row">
                             @if(isset($player['detail']))
@@ -55,7 +55,7 @@
                                     </div>
                                     <div class="col-md-5 col-xs-12">
                                         <div class="w-100 maxwidth-200 mx-auto">
-                                            <p class="player-label">Content</p>
+                                            <p class="player-label">{{__('common.content')}}</p>
                                             <input type="text" value="{{$value}}" name="{{$key}}" required />
                                         </div>
                                     </div>
@@ -63,7 +63,7 @@
                                         <div class="w-100 mx-auto d-flex align-items-center">
                                             <button type="button w-100" class="close" onclick="removeItem(this)">
                                                 <span aria-hidden="true">&times;</span>
-                                                <span class="sr-only">Close</span>
+                                                <span class="sr-only">{{__('common.close')}}</span>
                                             </button>
                                         </div>
                                     </div>

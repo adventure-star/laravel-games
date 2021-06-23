@@ -15,27 +15,27 @@
         <div class="row">
             
             <div class="col-md-10 col-md-offset-1 col-xs-12 text-center">
-                <h4>Games</h4>
+                <h4>{{__('common.games')}}</h4>
                 <!-- Fixtures Table -->
                 <div class="table-responsive fixtures-table">
                     <table class="table">
                         <tr>
-                            <th>No</th>
-                            <th>Name</th>
-                            <th>State</th>
-                            <th>Deadline</th>
-                            <th>Rounds</th>
-                            <th>Settings</th>
-                            <th>Players</th>
-                            <th>Edit</th>
-                            <th>Remove</th>
+                            <th>{{__('common.no_number')}}</th>
+                            <th>{{__('common.name')}}</th>
+                            <th>{{__('common.state')}}</th>
+                            <th>{{__('common.deadline')}}</th>
+                            <th>{{__('common.rounds')}}</th>
+                            <th>{{__('admin.settings')}}</th>
+                            <th>{{__('layout.players')}}</th>
+                            <th>{{__('common.edit')}}</th>
+                            <th>{{__('common.remove')}}</th>
                         </tr>
                         @if(isset($games) && count($games) > 0)
                             @foreach($games as $key => $item)
                                 <tr>
                                     <td>{{$key + 1}}</td>
                                     <td>{{$item['name']}}</td>
-                                    <td>{{$item["state"] == 0 ? "Not Opened" : ($item["state"] == 1 ? "Active" : "Expired")}}</td>
+                                    <td>{{$item["state"] == 0 ? __('common.not_opened') : ($item["state"] == 1 ? __('common.active') : __('common.expired'))}}</td>
                                     <td>{{$item['deadline']}}</td>
                                     <td>
                                         <a href="{{route('rounds', $item['id'])}}" class="btn btn-success-rgba"><i class="fa fa-bookmark"></i></a>
@@ -65,11 +65,11 @@
                                 
                                                 </div>
                                                 <div class="modal-body">
-                                                    <p class="font-24">Do you want to remove this game?</p>
+                                                    <p class="font-24">{{__('admin.remove_game_warning')}}</p>
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-primary float-left" data-dismiss="modal">No</button>
-                                                    <button type="button" class="btn btn-danger" onclick="deleteGame({{$item['id']}})">Yes</button>
+                                                    <button type="button" class="btn btn-primary float-left" data-dismiss="modal">{{__('common.no')}}</button>
+                                                    <button type="button" class="btn btn-danger" onclick="deleteGame({{$item['id']}})">{{__('common.yes')}}</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -84,7 +84,7 @@
         <div class="row">
             <div class="col-md-10 col-md-offset-1 col-xs-12">
                 <p class="text-right py-4">
-                    <a href="{{route('games.new')}}" class="underline text-primary text-xl-right">Add New Game</a>
+                    <a href="{{route('games.new')}}" class="underline text-primary text-xl-right">{{__('admin.add_new_game')}}</a>
                 </p>
             </div>
         </div>

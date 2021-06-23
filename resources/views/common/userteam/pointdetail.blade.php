@@ -17,106 +17,18 @@
                 @if(isset($detail))
                     @foreach($detail as $key => $item)
                         @if(!!$item)
-                            <div class="col-md-6 col-sm-12 mt-10">
-                                <div class="row">
-                                    <div class="col-sm-12 col-xs-12 mb-20">
-                                        {{App\Model\Player::find($item["playerid"])->team}} No {{App\Model\Player::find($item["playerid"])->no}} ({{App\Model\Player::find($item["playerid"])->name}})
-                                    </div>
-                                    @if($item["playing"] != 0)
-                                        <div class="col-sm-12 col-xs-12 mb-5">
-                                            Playing : {{$item["playing"]}}
+                            @if(App\Model\Point::where('roundplayerid', $item)->first())
+                                <div class="col-md-6 col-sm-12 mt-10">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-xs-12 mb-20">
+                                            {{App\Model\Player::find(App\Model\RoundPlayer::find($item)->playerid)->team}}, {{App\Model\Player::find(App\Model\RoundPlayer::find($item)->playerid)->name}}, No {{App\Model\RoundPlayer::find($item)->no}}
                                         </div>
-                                    @endif
-                                    @if($item["60min"] != 0)
-                                        <div class="col-sm-12 col-xs-12 mb-5">
-                                            60 min : {{$item["60min"]}}
+                                        <div class="col-sm-12 col-xs-12 mb-30 text-bold">
+                                            Point : {{App\Model\Point::where('roundplayerid', $item)->first()->total}} Points
                                         </div>
-                                    @endif
-                                    @if($item["goal"] != 0)
-                                        <div class="col-sm-12 col-xs-12 mb-5">
-                                            Goal : {{$item["goal"]}}
-                                        </div>
-                                    @endif
-                                    @if($item["assist"] != 0)
-                                        <div class="col-sm-12 col-xs-12 mb-5">
-                                            Assist : {{$item["assist"]}}
-                                        </div>
-                                    @endif
-                                    @if($item["decisivegoal"] != 0)
-                                        <div class="col-sm-12 col-xs-12 mb-5">
-                                            Decisive Goal : {{$item["decisivegoal"]}}
-                                        </div>
-                                    @endif
-                                    @if($item["owngoal"] != 0)
-                                        <div class="col-sm-12 col-xs-12 mb-5">
-                                            Own Goal : {{$item["owngoal"]}}
-                                        </div>
-                                    @endif
-                                    @if($item["sot"] != 0)
-                                        <div class="col-sm-12 col-xs-12 mb-5">
-                                            SOT : {{$item["sot"]}}
-                                        </div>
-                                    @endif
-                                    @if($item["penaltywon"] != 0)
-                                        <div class="col-sm-12 col-xs-12 mb-5">
-                                            Penalty Won : {{$item["penaltywon"]}}
-                                        </div>
-                                    @endif
-                                    @if($item["penaltycommitted"] != 0)
-                                        <div class="col-sm-12 col-xs-12 mb-5">
-                                            Penalty Committed : {{$item["penaltycommitted"]}}
-                                        </div>
-                                    @endif
-                                    @if($item["penaltysaved"] != 0)
-                                        <div class="col-sm-12 col-xs-12 mb-5">
-                                            Penalty Saved : {{$item["penaltysaved"]}}
-                                        </div>
-                                    @endif
-                                    @if($item["penaltymissed"] != 0)
-                                        <div class="col-sm-12 col-xs-12 mb-5">
-                                            Penalty Missed : {{$item["penaltymissed"]}}
-                                        </div>
-                                    @endif
-                                    @if($item["penaltysaved"] != 0)
-                                        <div class="col-sm-12 col-xs-12 mb-5">
-                                            Big Chance Missed : {{$item["bigchancemissed"]}}
-                                        </div>
-                                    @endif
-                                    @if($item["penaltysaved"] != 0)
-                                        <div class="col-sm-12 col-xs-12 mb-5">
-                                            Blocked Shots : {{$item["blockedshots"]}}
-                                        </div>
-                                    @endif
-                                    @if($item["saves"] != 0)
-                                        <div class="col-sm-12 col-xs-12 mb-5">
-                                            Saves : {{$item["saves"]}}
-                                        </div>
-                                    @endif
-                                    @if($item["goalagainst"] != 0)
-                                        <div class="col-sm-12 col-xs-12 mb-5">
-                                            Goal Against : {{$item["goalagainst"]}}
-                                        </div>
-                                    @endif
-                                    @if($item["yellow"] != 0)
-                                        <div class="col-sm-12 col-xs-12 mb-5">
-                                            Yellow : {{$item["yellow"]}}
-                                        </div>
-                                    @endif
-                                    @if($item["directred"] != 0)
-                                        <div class="col-sm-12 col-xs-12 mb-5">
-                                            Direct Red : {{$item["directred"]}}
-                                        </div>
-                                    @endif
-                                    @if($item["mom"] != 0)
-                                        <div class="col-sm-12 col-xs-12 mb-5">
-                                            MoM : {{$item["mom"]}}
-                                        </div>
-                                    @endif
-                                    <div class="col-sm-12 col-xs-12 mb-30 text-bold">
-                                        Total : {{$item["pointtot"]}} Points
                                     </div>
                                 </div>
-                            </div>
+                            @endif
                         @endif
                     @endforeach
                 @endif

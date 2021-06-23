@@ -19,11 +19,11 @@
                     <form id="submit-form" action="{{route('questions.new.save')}}" method="post">
                         @csrf
                         <input class="hidden" name="roundid" value="{{$id}}" />
-                        <h4>New Question</h4>
+                        <h4>{{__('admin.new_question')}}</h4>
                         <div class="row">
                             <div class="col-md-6 col-md-offset-3 col-xs-12">
                                 <div class="w-100 maxwidth-200 mx-auto">
-                                    <p class="player-label">Number</p>
+                                    <p class="player-label">{{__('common.number')}}</p>
                                     <input type="text" name="number" value="{{old('number')}}" required />
                                 </div>
                             </div>
@@ -31,7 +31,7 @@
                         <div class="row">
                             <div class="col-md-12 col-xs-12">
                                 <div class="w-100 mx-auto">
-                                    <p class="player-label">Text</p>
+                                    <p class="player-label">{{__('common.text')}}</p>
                                     <input type="text" name="text" value="{{old('text')}}" required />
                                 </div>
                             </div>

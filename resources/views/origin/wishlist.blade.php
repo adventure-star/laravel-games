@@ -28,7 +28,7 @@
 								<th class="price">price</th>
 								<th class="stock">stock status</th>
 								<th class="add-cart">add to cart</th>
-								<th class="remove">remove</th>
+								<th class="remove">{{__('common.remove')}}</th>
 							</tr>
 						</thead>
 						<tbody>

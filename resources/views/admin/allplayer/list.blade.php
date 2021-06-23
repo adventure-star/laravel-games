@@ -16,17 +16,17 @@
             
             <div class="col-md-10 col-md-offset-1 col-xs-12 text-center">
 
-                <h4>Players of "{{App\Model\Game::find($game)->name}}"</h4>
+                <h4>{{__('admin.players_of')}} "{{App\Model\Game::find($game)->name}}"</h4>
 
                 <!-- Fixtures Table -->
                 <div class="table-responsive fixtures-table">
                     <table class="table">
                         <tr>
                             <th>ID</th>
-                            <th>Team</th>
-                            <th>Name</th>
-                            <th>Edit</th>
-                            <th>Remove</th>
+                            <th>{{__('common.team')}}</th>
+                            <th>{{__('common.name')}}</th>
+                            <th>{{__('common.edit')}}</th>
+                            <th>{{__('common.remove')}}</th>
                         </tr>
                         @if(isset($players) && count($players) > 0)
                             @foreach($players as $key => $item)
@@ -53,11 +53,11 @@
                                 
                                                 </div>
                                                 <div class="modal-body">
-                                                    <p class="font-24">Do you want to remove this player?</p>
+                                                    <p class="font-24">{{__('admin.remove_player_warning')}}</p>
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-primary float-left" data-dismiss="modal">No</button>
-                                                    <button type="button" class="btn btn-danger" onclick="deletePlayer({{$item['id']}})">Yes</button>
+                                                    <button type="button" class="btn btn-primary float-left" data-dismiss="modal">{{__('common.no')}}</button>
+                                                    <button type="button" class="btn btn-danger" onclick="deletePlayer({{$item['id']}})">{{__('common.yes')}}</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -70,7 +70,7 @@
                 <div class="row">
                     <div class="col-sm-12 col-xs-12">
                         <p class="text-right-center py-4">
-                            <a href="{{route('games.players.new', $game)}}" class="underline text-primary text-xl-right">Add New Player</a>
+                            <a href="{{route('games.players.new', $game)}}" class="underline text-primary text-xl-right">{{__('admin.add_new_player')}}</a>
                         </p>
                     </div>
                 </div>

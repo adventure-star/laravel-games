@@ -19,11 +19,11 @@
                 <div class="table-responsive fixtures-table">
                     <table class="table">
                         <tr>
-                            <th>Game</th>
-                            <th>Name</th>
-                            <th>Abbreviation</th>
-                            <th>Edit</th>
-                            <th>Remove</th>
+                            <th>{{__('common.game')}}</th>
+                            <th>{{__('common.name')}}</th>
+                            <th>{{__('common.short')}}</th>
+                            <th>{{__('common.edit')}}</th>
+                            <th>{{__('common.remove')}}</th>
                         </tr>
                         @if(isset($teams) && count($teams) > 0)
                             @foreach($teams as $key => $item)
@@ -53,8 +53,8 @@
                                                     <p class="font-24">Do you want to remove this team?</p>
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-primary float-left" data-dismiss="modal">No</button>
-                                                    <button type="button" class="btn btn-danger" onclick="deleteTeam({{$item['id']}})">Yes</button>
+                                                    <button type="button" class="btn btn-primary float-left" data-dismiss="modal">{{__('common.no')}}</button>
+                                                    <button type="button" class="btn btn-danger" onclick="deleteTeam({{$item['id']}})">{{__('common.yes')}}</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -69,7 +69,7 @@
         <div class="row">
             <div class="col-md-10 col-md-offset-1 col-xs-12">
                 <p class="text-right py-4">
-                    <a href="{{route('teams.new')}}" class="underline text-primary text-xl-right">Add New Team</a>
+                    <a href="{{route('teams.new')}}" class="underline text-primary text-xl-right">{{__('admin.add_new_team')}}</a>
                 </p>
             </div>
         </div>

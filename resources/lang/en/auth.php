@@ -18,7 +18,10 @@ return [
 
     // Login
 
-    'join_game' => 'Join The Game!',
+    'login' => 'Log In',
+    'register' => 'Register',
+
+    'join_game' => 'Join The Game',
     'register_notify' => 'If you don\'t have an account, please',
     'reset_password_notify' => 'If you forgot your password, please',
     'click_here' => 'Click Here',
@@ -26,5 +29,12 @@ return [
 
     'email_regarding' => 'I want to receive email regarding this game and coming games.',
     'login_notify' => 'If you have an account, please',
+
+    // Reset Password
+
+    'enter_email' => 'Please Enter Your Email To Reset Password',
+    'reset_password' => 'Reset Password',
+    'reset' => 'Reset',
+
 
 ];

@@ -41,7 +41,7 @@
                         <input id="password-confirm" type="password" name="password_confirmation" required autocomplete="new-password">
 
                         <div class="row">
-                            <input type="submit" value="{{ __('Reset Password') }}" />
+                            <input type="submit" value="{{ __('auth.reset') }}" />
                         </div>
                     </form>
                 </div>

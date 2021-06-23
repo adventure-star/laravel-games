@@ -15,6 +15,16 @@ return [
 
     'failed' => 'These credentials do not match our records.',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
-    'opengames' => 'Opena Gamos',
+
+    // Login
+
+    'join_game' => 'Join The Game!',
+    'register_notify' => 'If you don\'t have an account, please',
+    'reset_password_notify' => 'If you forgot your password, please',
+    'click_here' => 'Click Here',
+    'create_account' => 'Create New Account!',
+
+    'email_regarding' => 'I want to receive email regarding this game and coming games.',
+    'login_notify' => 'If you have an account, please',
 
 ];

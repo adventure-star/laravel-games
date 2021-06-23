@@ -18,7 +18,7 @@
                 <div class="submit-form">
                     <form id="submit-form" action="{{route('games.players.new.save')}}" method="post">
                         @csrf
-                        <h4>New Player</h4>
+                        <h4>{{__('admin.new_player')}}</h4>
                         <input type="text" class="hidden" name="gameid" value="{{$id}}" />
                         <div class="row">
                             <div class="col-md-12 col-xs-12">
@@ -31,18 +31,18 @@
                         <div class="row">
                             <div class="col-md-6 col-xs-12">
                                 <div class="w-100 maxwidth-200 mx-auto">
-                                    <p class="player-label">Team</p>
+                                    <p class="player-label">{{__('common.team')}}</p>
                                     <input type="text" name="team" class="titleinput" value="{{old('team')}}" required />
                                 </div>
                             </div>
                             <div class="col-md-6 col-xs-12">
                                 <div class="w-100 maxwidth-200 mx-auto">
-                                    <p class="player-label">Name</p>
+                                    <p class="player-label">{{__('common.name')}}</p>
                                     <input type="text" name="name" value="{{old('name')}}" required />
                                 </div>
                             </div>
                         </div>
-                        <h5 class="mt-20">Additional Inputs</h5>
+                        <h5 class="mt-20">{{__('common.additional_inputs')}}</h5>
                         <hr />
                         <div id="newinputs" class="row">
                         </div>
@@ -53,13 +53,13 @@
                         <input type="submit" value="Submit">
                     </form>
                     <div class="mt-40">
-                        <h4>Import CSV file for Players</h4>
+                        <h4>{{__('admin.import_player_csv')}}</h4>
                         <form id="playeruploadform" action="{{route('uploads.player')}}" method="post" enctype="multipart/form-data">
                             @csrf
                             <input type="text" class="hidden" name="gameid" value="{{$id}}" />
                             <label class="custom-file-upload">
                                 <input onchange="upload()" class="hidden" type="file" name="file" />
-                                Import
+                                {{__('common.import')}}
                             </label>
                         </form>
                     </div>
@@ -83,7 +83,7 @@
                                     '<p class="player-label">Title</p><input type="text" onkeyup="changeName(this)" required />'+
                                 '</div></div>'+
                                 '<div class="col-md-5 col-xs-12"><div class="w-100 maxwidth-200 mx-auto">'+
-                                    '<p class="player-label">Content</p><input type="text" required />'+
+                                    '<p class="player-label">{{__("common.content")}}</p><input type="text" required />'+
                                 '</div></div>'+
                                 '<div class="col-md-2 col-xs-12"><div class="w-100 mx-auto d-flex align-items-center">'+
                                     '<button type="button w-100" class="close" onclick="removeItem(this)"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>'+

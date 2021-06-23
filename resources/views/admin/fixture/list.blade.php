@@ -19,13 +19,13 @@
                 <div class="table-responsive fixtures-table">
                     <table class="table">
                         <tr>
-                            <th>match</th>
-                            <th>date</th>
-                            <th>time</th>
-                            <th>group</th>
-                            <th>round</th>
-                            <th>Edit</th>
-                            <th>Remove</th>
+                            <th>{{__('admin.match')}}</th>
+                            <th>{{__('admin.date')}}</th>
+                            <th>{{__('admin.time')}}</th>
+                            <th>{{__('common.group')}}</th>
+                            <th>{{__('common.round')}}</th>
+                            <th>{{__('common.edit')}}</th>
+                            <th>{{__('common.remove')}}</th>
                         </tr>
                         @if(isset($fixtures) && count($fixtures) > 0)
                             @foreach($fixtures as $key => $item)
@@ -54,11 +54,11 @@
                                 
                                                 </div>
                                                 <div class="modal-body">
-                                                    <p class="font-24">Do you want to remove this fixture?</p>
+                                                    <p class="font-24">{{__('admin.remove_fixture_warning')}}</p>
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-primary float-left" data-dismiss="modal">No</button>
-                                                    <button type="button" class="btn btn-danger" onclick="deleteFixture({{$item['id']}})">Yes</button>
+                                                    <button type="button" class="btn btn-primary float-left" data-dismiss="modal">{{__('common.no')}}</button>
+                                                    <button type="button" class="btn btn-danger" onclick="deleteFixture({{$item['id']}})">{{__('common.yes')}}</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -73,7 +73,7 @@
         <div class="row">
             <div class="col-md-10 col-md-offset-1 col-xs-12">
                 <p class="text-right py-4">
-                    <a href="{{route('fixtures.new')}}" class="underline text-primary text-xl-right">Add New Fixture</a>
+                    <a href="{{route('fixtures.new')}}" class="underline text-primary text-xl-right">{{__('admin.add_new_fixture')}}</a>
                 </p>
             </div>
         </div>

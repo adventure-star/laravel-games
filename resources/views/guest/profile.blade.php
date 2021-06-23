@@ -18,15 +18,15 @@
                 <div class="table-responsive fixtures-table">
                     <table class="table">
                         <tr>
-                            <td>Full Name</td>
+                            <td>{{__('common.fullname')}}</td>
                             <td>{{$user['fullname']}}</td>
                         </tr>
                         <tr>
-                            <td>User Name</td>
+                            <td>{{__('common.username')}}</td>
                             <td>{{$user['username']}}</td>
                         </tr>
                         <tr>
-                            <td>Email</td>
+                            <td>{{__('common.email')}}</td>
                             <td>{{$user['email']}}</td>
                         </tr>
                     </table>

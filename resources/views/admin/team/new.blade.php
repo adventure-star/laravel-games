@@ -18,16 +18,16 @@
                 <div class="submit-form">
                     <form id="submit-form" action="{{route('teams.new.save')}}" method="post">
                         @csrf
-                        <h4>New Team</h4>
+                        <h4>{{__('admin.new_team')}}</h4>
                         <div class="row">
                             <div class="col-md-12 col-xs-12">
                                 <div class="w-100 maxwidth-200 mx-auto">
-                                    <h4>Select Game</h4>
+                                    <h4>{{__('common.select_game')}}</h4>
                                     <select class="normal-component maxwidth-200" name="gameid" onchange="getResultsByGameId(this)">
-                                        <option disabled selected>Select Game!</option>
+                                        <option disabled selected>{{__('common.select_game')}}!</option>
                                         @if(isset($games) && count($games) > 0)
                                             @foreach($games as $key => $item)
-                                                <option value={{$item['id']}} @if(isset($game) && $game == $item['id']) selected @endif>{{$item['name']}} ({{$item['state'] == 0 ? "Not Opened" : ($item['state'] == 1 ? "Active" : "Expired")}})</option>
+                                                <option value={{$item['id']}} @if(isset($game) && $game == $item['id']) selected @endif>{{$item['name']}} ({{$item['state'] == 0 ? __('common.not_opened') : ($item['state'] == 1 ? __('common.active') : __('common.expired'))}})</option>
                                             @endforeach
                                         @endif
                                     </select>
@@ -37,7 +37,7 @@
                         <div class="row">
                             <div class="col-md-6 col-md-offset-3 col-xs-12">
                                 <div class="w-100 maxwidth-200 mx-auto">
-                                    <p class="player-label">Long Name</p>
+                                    <p class="player-label">{{__('common.name')}}</p>
                                     <input type="text" name="longname" value="{{old('longname')}}" required/>
                                 </div>
                             </div>
@@ -45,7 +45,7 @@
                         <div class="row">
                             <div class="col-md-6 col-md-offset-3 col-xs-12">
                                 <div class="w-100 maxwidth-200 mx-auto">
-                                    <p class="player-label">Short Name</p>
+                                    <p class="player-label">{{__('common.short')}}</p>
                                     <input type="text" name="shortname" value="{{old('shortname')}}" required/>
                                 </div>
                             </div>
@@ -53,15 +53,15 @@
                         <input type="submit" value="Submit">
                     </form>
                     <div class="mt-40">
-                        <h4>Import CSV file for Abbs</h4>
+                        <h4>{{__('admin.import_csv_abb')}}</h4>
                         <form id="playeruploadform" action="{{route('uploads.abbs')}}" method="post" enctype="multipart/form-data">
                             @csrf
                             <div class="row">
                                 <div class="col-md-12 col-xs-12">
                                     <div class="w-100 maxwidth-200 mx-auto">
-                                        <p class="player-label">Game</p>
+                                        <p class="player-label">{{__('common.game')}}</p>
                                         <select name="gameid" required>
-                                            <option disabled selected>Select Game!</option>
+                                            <option disabled selected>{{__('common.select_game')}}!</option>
                                             @if(isset($games) && count($games) > 0)
                                                 @foreach($games as $key=>$item)
                                                     <option value={{$item['id']}} @if(isset($game) && $game == $item['id']) selected @endif @if(old('game') == $item['id'])selected @endif>{{$item['name']}}</option>
@@ -73,7 +73,7 @@
                             </div>
                             <label class="custom-file-upload">
                                 <input onchange="upload()" class="hidden" type="file" name="file" />
-                                Import
+                                {{__('common.import')}}
                             </label>
                         </form>
                     </div>

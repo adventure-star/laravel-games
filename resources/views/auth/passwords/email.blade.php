@@ -16,7 +16,7 @@
             <!-- Contact Form -->
             <div class="col-sm-8 col-sm-offset-2 col-xs-12 mb-30">
                 <div class="contact-form">
-                    <h4>Please Enter Your Email To Reset Password!</h4>
+                    <h4>{{__('auth.enter_email')}}!</h4>
                     <form id="contact-form" action="{{ route('password.email') }}" method="post">
                         @csrf
                         <input id="email" type="email" class="@error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
@@ -27,7 +27,7 @@
                             </p>
                         @enderror
 
-                        <input type="submit" value="{{ __('Send Reset Link') }}" />
+                        <input type="submit" value="{{ __('common.send') }}" />
 
                         <div class="py-4"></div>
 

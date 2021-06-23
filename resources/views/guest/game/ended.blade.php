@@ -18,8 +18,8 @@
                 <div class="table-responsive fixtures-table">
                     <table class="table">
                         <tr>
-                            <th>No</th>
-                            <th>Name</th>
+                            <th>{{__('common.no_number')}}</th>
+                            <th>{{__('common.name')}}</th>
                         </tr>
                         @if(isset($games) && count($games) > 0)
                             @foreach($games as $key => $game)

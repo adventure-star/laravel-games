@@ -18,14 +18,14 @@
                 <div class="submit-form">
                     <form id="submit-form" action="{{route('fixtures.update')}}" method="post">
                         @csrf
-                        <h4>Edit Fixture</h4>
+                        <h4>{{__('admin.edit_fixture')}}</h4>
                         <input class="hidden" name="id" value={{$id}} />
                         <div class="row">
                             <div class="col-md-6 col-xs-12">
                                 <div class="w-100 maxwidth-200 mx-auto">
-                                    <p class="player-label">Round</p>
+                                    <p class="player-label">{{__('common.round')}}</p>
                                     <select name="round" required>
-                                        <option disabled selected>Select Round!</option>
+                                        <option disabled selected>{{__('common.select_round')}}!</option>
                                         @if(isset($rounds) && count($rounds) > 0)
                                             @foreach($rounds as $key=>$item)
                                                 <option value={{$item['id']}} @if($fixture["round"] == $item['id'])selected @endif>{{$item['roundno']}}</option>
@@ -36,7 +36,7 @@
                             </div>
                             <div class="col-md-6 col-xs-12">
                                 <div class="w-100 maxwidth-200 mx-auto">
-                                    <p class="player-label">Group</p>
+                                    <p class="player-label">{{__('common.group')}}</p>
                                     <input type="text" name="group" @if(isset($fixture)) value="{{$fixture["group"]}}"@endif />
                                 </div>
                             </div>
@@ -44,9 +44,9 @@
                         <div class="row">
                             <div class="col-md-6 col-xs-12">
                                 <div class="w-100 maxwidth-200 mx-auto">
-                                    <p class="player-label">Team A</p>
+                                    <p class="player-label">{{__('admin.team_a')}}</p>
                                     <select name="teama" required>
-                                        <option disabled selected>Select Team</option>
+                                        <option disabled selected>{{__('common.select_team')}}</option>
                                         @if(isset($teams) && count($teams) > 0)
                                             @foreach($teams as $key=>$item)
                                                 <option value={{$item['id']}} @if($fixture["teama"] == $item['id']) selected @endif>{{$item['name']}}</option>
@@ -57,9 +57,9 @@
                             </div>
                             <div class="col-md-6 col-xs-12">
                                 <div class="w-100 maxwidth-200 mx-auto">
-                                    <p class="player-label">Team B</p>
+                                    <p class="player-label">{{__('admin.team_b')}}</p>
                                     <select name="teamb" required>
-                                        <option disabled selected>Select Team</option>
+                                        <option disabled selected>{{__('common.select_team')}}</option>
                                         @if(isset($teams) && count($teams) > 0)
                                             @foreach($teams as $key=>$item)
                                                 <option value={{$item['id']}} @if($fixture["teamb"] == $item['id']) selected @endif>{{$item['name']}}</option>
@@ -72,13 +72,13 @@
                         <div class="row">
                             <div class="col-md-6 col-xs-12">
                                 <div class="w-100 maxwidth-200 mx-auto">
-                                    <p class="player-label">Date</p>
+                                    <p class="player-label">{{__('admin.date')}}</p>
                                     <input type="text" name="date" @if(isset($fixture)) value="{{$fixture["date"]}}"@endif />
                                 </div>
                             </div>
                             <div class="col-md-6 col-xs-12">
                                 <div class="w-100 maxwidth-200 mx-auto">
-                                    <p class="player-label">CET</p>
+                                    <p class="player-label">{{__('admin.cet')}}</p>
                                     <input type="text" name="cet" @if(isset($fixture)) value="{{$fixture["cet"]}}"@endif />
                                 </div>
                             </div>

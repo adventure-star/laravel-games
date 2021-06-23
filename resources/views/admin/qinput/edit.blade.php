@@ -18,18 +18,18 @@
                 <div class="submit-form">
                     <form id="submit-form" action="{{route('qinputs.update')}}" method="post">
                         @csrf
-                        <h4>Edit Answer</h4>
+                        <h4>{{__('admin.edit_answer')}}</h4>
                         <input class="hidden" name="id" value={{$id}} />
                         <div class="row">
                             <div class="col-md-6 col-xs-12">
                                 <div class="w-100 maxwidth-200 mx-auto">
-                                    <p class="player-label">Content</p>
+                                    <p class="player-label">{{__('common.content')}}</p>
                                     <input type="text" name="input" @if(isset($qinput)) value="{{$qinput["input"]}}"@endif />
                                 </div>
                             </div>
                             <div class="col-md-6 col-xs-12">
                                 <div class="w-100 maxwidth-200 mx-auto">
-                                    <p class="player-label">Point</p>
+                                    <p class="player-label">{{__('common.point')}}</p>
                                     <input type="number" name="point" @if(isset($qinput)) value="{{$qinput["point"]}}"@endif />
                                 </div>
                             </div>
