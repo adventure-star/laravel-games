@@ -2,13 +2,6 @@
 
 @section('content')
 
-<!-- Page Banner Area Start -->
-<div id="page-banner-area" class="page-banner-area section">
-    <div class="container">
-    </div>
-</div>
-<!-- Page Banner Area End -->
-
 <!-- Contact Area Start -->
 <div id="contact-area" class="contact-area section pb-90 pt-120">
     <div class="container">
@@ -19,7 +12,7 @@
                     <h4>{{__('auth.join_game')}}!</h4>
                     <form id="contact-form" action="{{route('login')}}" method="post">
                         @csrf
-                        <input type="text" class="@error('username') is-invalid @enderror" name="username" placeholder="{{__('common.name')}}" value="{{ old('username') }}" required autocomplete="username" autofocus>
+                        <input type="text" class="@error('username') is-invalid @enderror" name="username" placeholder="{{__('common.loginname')}}" value="{{ old('username') }}" required autocomplete="username" autofocus>
                         <input type="password" class="@error('password') is-invalid @enderror" name="password" placeholder="{{__('common.password')}}" required autocomplete="current-password">
                         @error('username')
                             <p class="invalid-feedback" role="alert">

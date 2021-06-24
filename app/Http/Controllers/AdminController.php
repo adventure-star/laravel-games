@@ -183,6 +183,7 @@ class AdminController extends Controller
         $validator = Validator::make($request->all(),
         [
             'roundno' => 'required|string',
+            'deadline' => 'required|string',
             'state' => 'required|string',
         ]);
 
@@ -194,6 +195,7 @@ class AdminController extends Controller
 
         $data = ([
             'roundno' => $request->roundno,
+            'deadline' => $request->deadline,
             'state' => $request->state,
         ]);
 
@@ -212,6 +214,7 @@ class AdminController extends Controller
         [
             'gameid' => 'required|string',
             'roundno' => 'required|string',
+            'deadline' => 'required|string',
             'state' => 'required|string',
         ]);
 
@@ -226,6 +229,7 @@ class AdminController extends Controller
         $new = new Round();
         $new->gameid = $request->gameid;
         $new->roundno = $request->roundno;
+        $new->deadline = $request->deadline;
         $new->state = $request->state;
         $new->save();
     

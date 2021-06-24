@@ -18,6 +18,7 @@ class CreateRoundsTable extends Migration
             $table->unsignedBigInteger('gameid');
             $table->unsignedBigInteger('roundno');
             $table->integer('state')->default(0);
+            $table->string('deadline')->nullable();
             $table->json('other')->nullable();
             $table->integer('active')->default(1);
             $table->timestamps();

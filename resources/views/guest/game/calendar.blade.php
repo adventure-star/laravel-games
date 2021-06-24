@@ -2,13 +2,6 @@
 
 @section('content')
 
-<!-- Page Banner Area Start -->
-<div id="page-banner-area" class="page-banner-area section">
-    <div class="container">
-    </div>
-</div>
-<!-- Page Banner Area End -->
-
 <!-- Fixtures Area Start -->
 <div id="fixtures-area" class="fixtures-area section pb-120 pt-120">
     <div class="container">
@@ -20,17 +13,11 @@
                         <tr>
                             <th>{{__('common.no_number')}}</th>
                             <th>{{__('common.name')}}</th>
-                            <th>{{__('common.state')}}</th>
+                            <th>@if(Auth::user()) {{__('common.state')}} @else {{__('common.coming')}} @endif</th>
                             <th>{{__('common.deadline')}}</th>
                         </tr>
                         @if(isset($games) && count($games) > 0)
                             @foreach($games as $key => $game)
-                                {{-- <tr>
-                                    <td>{{$key + 1}}</td>
-                                    <td>{{$game['name']}}</td>
-                                    <td>{{$game['state'] == 0 ? __('common.not_opened') : ($game['state'] == 1 ? __('common.active') : __('common.expired'))}}</td>
-                                    <td>{{$game['deadline']}}</td>
-                                </tr> --}}
                                 @if(Auth::user())
                                     @if($game->joined == 0)
                                         @if(App\Model\GameUser::where(['gameid' => $game['id'], 'userid' => Auth::user()->id])->first())

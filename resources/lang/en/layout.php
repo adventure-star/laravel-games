@@ -11,6 +11,7 @@ return [
     'standing' => 'Standing',
     'groupstanding' => 'Group Standing',
     'home' => 'Home',
+    'setteam' => 'Set Team',
     'game' => 'Game',
     'rule' => 'Rules',
     'mygames' => 'My Games',

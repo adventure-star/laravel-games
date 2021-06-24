@@ -74,9 +74,11 @@ return [
     // Group Standing
 
     'select_expired_games' => 'Select Expired Games',
+    'select_expired_round' => 'Select Expired Round',
     'pointdetail' => 'PointDetail',
     'total_points' => 'Total Points',
     'total' => 'Total',
+    'coming' => 'coming',
 
     // List
 

@@ -251,13 +251,13 @@ class CommonController extends Controller
             $game = session('game');
         }
 
-        $games = Game::where('state', 2)->get();
+        $games = Game::all();
 
         if($game) {
             
-            $rounds = Round::where(['gameid' => $game])->get();
+            $rounds = Round::where(['gameid' => $game, 'state' => 2])->get();
 
-            if(!!$round && $round !== 'all') {
+            if(!!$round && $round !== 'all') {  
 
                 $teams = Team::leftJoin('results', 'teams.id', '=', 'results.teamid')
                 ->selectRaw('teams.*, results.point as point')
@@ -296,11 +296,11 @@ class CommonController extends Controller
             $game = session('game');
         }
 
-        $games = Game::where('state', 2)->get();
+        $games = Game::all();
 
         if($game) {
             
-            $rounds = Round::where(['gameid' => $game])->get();
+            $rounds = Round::where(['gameid' => $game, 'state' => 2])->get();
 
             if(!!$round && $round !== 'all') {
 

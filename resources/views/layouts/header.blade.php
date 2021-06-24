@@ -54,6 +54,8 @@
 
                                         @if(Route::is('submit') || Route::is('rule') || Route::is('userteams') || Route::is('standing') || Route::is('groupstanding'))
                                             <li><a href={{route('games.joined')}}>{{__('layout.home')}}</a></li>
+                                            <li @if(Route::is('submit'))class="active"@endif><a href={{route('submit', Session::get('game'))}}>{{__('layout.setteam')}}</a></li>
+
                                             {{-- <li @if(Route::is('submit'))class="active"@endif><a href={{route('games.joined')}}>{{__('layout.game')}}</a></li> --}}
                                             <li @if(Route::is('rule'))class="active"@endif><a href={{route('rule')}}>{{__('layout.rule')}}</a></li>
                                             <li @if(Route::is('userteams'))class="active"@endif><a href={{route('userteams')}}>{{__('layout.myteam')}}</a></li>
@@ -98,6 +100,7 @@
 
                                     @if(Route::is('submit') || Route::is('rule') || Route::is('standing'))
                                         <li><a href={{route('games.open')}}>{{__('layout.home')}}</a></li>
+                                        {{-- <li @if(Route::is('submit'))class="active"@endif><a href={{route('submit', Session::get('game'))}}>{{__('layout.setteam')}}</a></li> --}}
                                         <li @if(Route::is('rule'))class="active"@endif><a href={{route('rule')}}>{{__('layout.rule')}}</a></li>
                                         <li @if(Route::is('standing'))class="active"@endif><a href={{route('standing')}}>{{__('layout.standing')}}</a></li>
                                     @else
@@ -128,7 +131,20 @@
                                 @if(Auth::user())
 
                                     @if(Route::is('submit') || Route::is('rule') || Route::is('standing') || Route::is('userteams'))
-                                        <li><a href="#">{{App\Model\Game::find(Session::get('game'))->name}}</a></li>
+                                        @if(Auth::user()->isadmin == 1)
+                                            <li @if(Route::is('profile'))class="active"@endif><a href={{route('profile')}}>{{Auth::user()->fullname}}</a>
+                                                <ul>
+                                                    <li>
+                                                        <a href="#" onclick="logout()">{{__('layout.logout')}}</a>
+                                                        <form id="logoutform" class="w-full" method="post" action="{{ route('logout') }}">
+                                                            @csrf
+                                                        </form>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        @else
+                                            <li><a href="#">{{App\Model\Game::find(Session::get('game'))->name}}</a></li>
+                                        @endif
                                     @else
                                         <li @if(Route::is('profile'))class="active"@endif><a href={{route('profile')}}>{{Auth::user()->fullname}}</a>
                                             <ul>

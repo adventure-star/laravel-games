@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.png">
+    <link rel="shortcut icon" type="image/x-icon" href="{{asset('img/favicon.png')}}">
     <!-- Fonts -->
     <link rel="stylesheet" href="{{asset('css/montserrat.css')}}">
     <!-- CSS -->
@@ -36,6 +36,8 @@
 
         @include('layouts.header')
 
+        @include('layouts.banner')
+
         @yield('content')
 
         @include('layouts.footer')
@@ -55,6 +57,9 @@
             function logout() {
                 document.getElementById("logoutform").submit();
             }
+            // (function() {
+            //     $(".page-banner-area").css('background-image', "{{asset('img/bg/achievement.jpg')}}");
+            // })
         </script>
 
         @yield('scripts')

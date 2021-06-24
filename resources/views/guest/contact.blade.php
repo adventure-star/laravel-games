@@ -2,13 +2,6 @@
 
 @section('content')
 
-<!-- Page Banner Area Start -->
-<div id="page-banner-area" class="page-banner-area section">
-    <div class="container">
-    </div>
-</div>
-<!-- Page Banner Area End -->
-
 <!-- Contact Area Start -->
 <div id="contact-area" class="contact-area section pb-90 pt-120">
     <div class="container">

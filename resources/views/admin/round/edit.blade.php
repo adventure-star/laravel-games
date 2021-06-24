@@ -2,13 +2,6 @@
 
 @section('content')
 
-<!-- Page Banner Area Start -->
-<div id="page-banner-area" class="page-banner-area section">
-    <div class="container">
-    </div>
-</div>
-<!-- Page Banner Area End -->
-
 <!-- Contact Area Start -->
 <div id="contact-area" class="contact-area section pb-90 pt-120">
     <div class="container">
@@ -24,7 +17,15 @@
                             <div class="col-md-6 col-md-offset-3 col-xs-12">
                                 <div class="w-100 maxwidth-200 mx-auto">
                                     <p class="player-label">{{__('admin.roundno')}}</p>
-                                    <input type="text" name="roundno" @if(isset($round)) value={{$round["roundno"]}}@endif />
+                                    <input type="text" name="roundno" @if(isset($round)) value="{{$round["roundno"]}}"@endif />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-md-offset-3 col-xs-12">
+                                <div class="w-100 maxwidth-200 mx-auto">
+                                    <p class="player-label">{{__('common.deadline')}}</p>
+                                    <input type="text" name="deadline" @if(isset($round)) value="{{$round["deadline"]}}"@endif />
                                 </div>
                             </div>
                         </div>

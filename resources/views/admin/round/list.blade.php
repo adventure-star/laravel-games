@@ -2,13 +2,6 @@
 
 @section('content')
 
-<!-- Page Banner Area Start -->
-<div id="page-banner-area" class="page-banner-area section">
-    <div class="container">
-    </div>
-</div>
-<!-- Page Banner Area End -->
-
 <!-- Fixtures Area Start -->
 <div id="fixtures-area" class="fixtures-area section pb-120 pt-120">
     <div class="container">
@@ -22,6 +15,7 @@
                     <table class="table">
                         <tr>
                             <th>{{__('admin.roundno')}}</th>
+                            <th>{{__('common.deadline')}}</th>
                             <th>{{__('common.state')}}</th>
                             <th>{{__('common.edit')}}</th>
                             <th>{{__('common.remove')}}</th>
@@ -30,6 +24,7 @@
                             @foreach($rounds as $key => $item)
                                 <tr>
                                     <td>{{$item["roundno"]}}</td>
+                                    <td>{{$item["deadline"]}}</td>
                                     <td>{{$item["state"] == 0 ? __('common.not_opened') : ($item["state"] == 1 ? __('common.active') : __('common.expired'))}}</td>
                                     <td>
                                         <a href="{{route('rounds.edit', $item['id'])}}" class="btn btn-success-rgba"><i class="fa fa-edit"></i></a>

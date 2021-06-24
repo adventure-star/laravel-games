@@ -2,13 +2,6 @@
 
 @section('content')
 
-<!-- Page Banner Area Start -->
-<div id="page-banner-area" class="page-banner-area section">
-    <div class="container">
-    </div>
-</div>
-<!-- Page Banner Area End -->
-
 <!-- Fixtures Area Start -->
 <div id="fixtures-area" class="fixtures-area section pb-120 pt-120">
     <div class="container">
@@ -20,7 +13,7 @@
 
                     <div class="row">
                         <div class="mt-0 mb-20">
-                            <h4>{{__('common.select_expired_games')}}</h4>
+                            <h4>{{__('common.select_game')}}</h4>
                             <select class="normal-component maxwidth-200" onchange="getResultsByGameId(this)">
                                 <option disabled selected>{{__('common.select_game')}}</option>
                                 @if(isset($games) && count($games) > 0)
@@ -38,7 +31,7 @@
 
                     <div class="row">
                         <div class="mt-0 mb-20">
-                            <h4>{{__('common.select_round')}}</h4>
+                            <h4>{{__('common.select_expired_round')}}</h4>
                             <select class="normal-component maxwidth-200" onchange="getResultsByRoundId(this)">
                                 <option value="all">{{__('common.total')}}</option>
                                 @if(isset($rounds) && count($rounds) > 0)
@@ -65,13 +58,13 @@
                                 @if(isset($teams) && count($teams) > 0)
                                     @foreach($teams as $key => $item)
                                         <tr>
-                                            <td>{{App\User::where(['userid' => $item['userid']])->first()->displayname}}</td>
+                                            <td>{{App\User::find($item['userid'])->displayname}}</td>
                                             <td>{{App\Model\GameUser::where(['userid' => $item['userid'], 'gameid' => $item['gameid']])->first()->teamname}}</td>
                                             <td>{{App\Model\Round::find($item["roundid"])["roundno"] }}</td>
                                             <td class="maxwidth-200">
                                                 @if(isset($item->detail))
                                                     @foreach(json_decode($item->detail) as $key=>$value)
-                                                        {{$key}} : {{App\Model\Player::find($value)['name'] }}
+                                                        {{$key}} : {{App\Model\Player::find(App\Model\RoundPlayer::find($value)['playerid'])['name'] }}
                                                     @endforeach
                                                 @endif
                                             </td>
@@ -90,12 +83,14 @@
                         <div class="table-responsive fixtures-table">
                             <table class="table">
                                 <tr>
+                                    <th>{{__('common.username')}}</th>
                                     <th>{{__('common.team')}}</th>
                                     <th>{{__('common.total_points')}}</th>
                                 </tr>
                                 @if(isset($teams) && count($teams) > 0)
                                     @foreach($teams as $key => $item)
                                         <tr>
+                                            <td>{{App\User::find($item['userid'])->displayname}}</td>
                                             <td>{{App\Model\GameUser::where(['userid' => $item['userid'], 'gameid' => $item['gameid']])->first()->teamname}}</td>
                                             <td>{{$item['point']}}</td>
                                         </tr>

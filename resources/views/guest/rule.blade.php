@@ -2,13 +2,6 @@
 
 @section('content')
 
-<!-- Page Banner Area Start -->
-<div id="page-banner-area" class="page-banner-area section">
-    <div class="container">
-    </div>
-</div>
-<!-- Page Banner Area End -->
-
 <!-- Profile Area Start -->
 <div id="fixtures-area" class="fixtures-area section pb-120 pt-120">
     <div class="container-fluid">
