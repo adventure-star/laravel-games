@@ -7,10 +7,13 @@
     <title>Sofa League</title>
 </head>
 <body>
-    <h3>To Sofa League</h3>
-    <hr />
-    <p>Name: {{$name}}</p>
-    <hr />
-    <p>{{$message}}</p>
+    <div style="border: 1px dashed gray; padding: 16px; background-image: linear-gradient(to bottom, white, #B0E0E6);">
+        <h3 style="color: red; text-align: center;">To Sofa League</h3>
+        <hr />
+        <h4>Name: <span style="color: blue;">{{$names}}</span></h4>
+        <hr />
+        <p>{{$messages}}</p>
+    </div>
+    
 </body>
 </html>

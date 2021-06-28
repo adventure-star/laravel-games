@@ -698,7 +698,7 @@ class AdminController extends Controller
 
     public function users() {
         
-        $users = User::where('isadmin', "!=", 1)->get();
+        $users = User::where('active', 1)->where('isadmin', "!=", 1)->get();
         return view('admin.user.list', compact('users'));
 
     }
