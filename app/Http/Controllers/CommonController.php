@@ -46,12 +46,12 @@ class CommonController extends Controller
 
             $this->fromEmail = $request->email;
             $this->subject = $request->subject;
-    
-            $this->mailer->send('layouts.email', ['name'=>$request->name, 'message'=>$request->message], function (Message $m){
+
+            $this->mailer->send('layouts.email', ['names'=>$request->name, 'messages'=>$request->message], function (Message $m){
                 $m->from($this->fromEmail)->to($this->admin_email)->subject($this->subject);
             });
 
-            return redirect()->route('index');
+            return redirect()->back()->with('message', 'Message sent, we will reply asap!');
 
         } catch (Exception $e) {
 
